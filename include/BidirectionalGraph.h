@@ -6,8 +6,6 @@
 #include <set>
 #include <tuple>
 
-#include <iostream>
-
 template <typename Key_t, typename Value_t>
 class BidirectionalGraph {
     typedef std::set<Key_t> Keys_t;
@@ -43,6 +41,31 @@ class BidirectionalGraph {
         Keys_t allSuccessors(const Key_t& key)
         {
             return reachable(key, [this](const Key_t& k) { return this->immSuccs(k); });
+        }
+
+        Keys_t minimalElements()
+        {
+            Keys_t res;
+
+            for (auto& item : rep_) {
+                if (predecessors(item.first).size() == 0) {
+                    res.insert(item.first);
+                }
+            }
+
+            return res;
+        }
+        Keys_t maximalElements()
+        {
+            Keys_t res;
+
+            for (auto& item : rep_) {
+                if (successors(item.first).size() == 0) {
+                    res.insert(item.first);
+                }
+            }
+
+            return res;
         }
 
         void insertNode(const Key_t& key, const Value_t& value)

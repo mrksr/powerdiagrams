@@ -19,6 +19,12 @@ int main(int argc, char *argv[])
     for (auto& item : graph.allPredecessors("soße")) {
         std::cout << "Predecessor: " << item << std::endl;
     }
-    std::cout << "Heyo!" << std::endl;
+
+    for (auto& item : graph.minimalElements()) {
+        std::cout << "Minimal: " << item << std::endl;
+    }
+    for (auto& item : graph.maximalElements()) {
+        std::cout << "Maximal: " << item << std::endl;
+    }
     return 0;
 }
