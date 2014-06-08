@@ -29,5 +29,5 @@ multi:
 	$(MAKE) all -j 4
 
 .PHONY: run
-run: rel
+run: dbg
 	cd $(DEBUG); ./powerdiagram
