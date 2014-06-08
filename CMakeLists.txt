@@ -9,10 +9,17 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 ###############
 set(LIB_INCS)
 set(LIB_LIBS)
+
 find_package(Eigen3 REQUIRED)
 if(EIGEN3_FOUND)
     list(APPEND LIB_INCS ${EIGEN3_INCLUDE_DIR})
     list(APPEND LIB_LIBS ${EIGEN3_LIBRARIES})
+endif()
+
+find_package(CGAL REQUIRED)
+if (CGAL_FOUND)
+    list(APPEND LIB_INCS ${CGAL_INCLUDE_DIRS})
+    list(APPEND LIB_LIBS ${CGAL_LIBRARY})
 endif()
 
 ####################
@@ -38,3 +45,5 @@ add_executable(powerdiagram
 target_link_libraries(powerdiagram
     ${LIB_LIBS}
     )
+
+message("${LIB_INCS}")
