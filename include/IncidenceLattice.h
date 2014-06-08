@@ -26,7 +26,7 @@ class IncidenceLattice {
         {
             auto key = nextKey();
             rep_.insertNode(key, vertex);
-            keys_[key] = vertex;
+            keys_[vertex] = key;
 
             return key;
         }
