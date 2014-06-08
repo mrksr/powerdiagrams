@@ -23,7 +23,11 @@ class BidirectionalGraph {
 
         Value_t& value(const Key_t& key)
         {
-            return rep_[key];
+            return std::get<0>(rep_[key]);
+        }
+        void value(const Key_t& key, const Value_t& value)
+        {
+            std::get<0>(rep_[key]) = value;
         }
 
         const Keys_t& predecessors(const Key_t& key)

@@ -26,6 +26,10 @@ class IncidenceLattice {
         {
             return rep_.value(key);
         }
+        void value(const Key_t& key, const Value_t& value)
+        {
+            rep_.value(key, value);
+        }
 
         Keys_t minimals()
         {
