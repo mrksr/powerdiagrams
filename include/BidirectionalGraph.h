@@ -8,12 +8,12 @@
 
 template <typename Key_t, typename Value_t>
 class BidirectionalGraph {
-    typedef std::set<Key_t> Keys_t;
-    typedef std::tuple<Value_t, Keys_t, Keys_t> Entry_t;
-    typedef std::map<Key_t, Entry_t> Graph_t;
-
     public:
-        BidirectionalGraph(): rep_() {}
+        typedef std::set<Key_t> Keys_t;
+        typedef std::tuple<Value_t, Keys_t, Keys_t> Entry_t;
+        typedef std::map<Key_t, Entry_t> Graph_t;
+
+        BidirectionalGraph(): rep_() { }
         virtual ~BidirectionalGraph() { }
 
         bool nodeExists(const Key_t& key) const
@@ -36,19 +36,50 @@ class BidirectionalGraph {
         }
         Keys_t allPredecessors(const Key_t& key)
         {
-            return reachable(key, [this](const Key_t& k) { return this->immPreds(k); });
+            return reachable(
+                    key,
+                    [this](const Key_t& k) { return this->immPreds(k); }
+                    );
         }
         Keys_t allSuccessors(const Key_t& key)
         {
-            return reachable(key, [this](const Key_t& k) { return this->immSuccs(k); });
+            return reachable(
+                    key,
+                    [this](const Key_t& k) { return this->immSuccs(k); }
+                    );
         }
 
+        Keys_t minimalPredecessors(const Key_t& key)
+        {
+            return reachableFilter(
+                    key,
+                    [this](const Key_t& k) { return this->isMinimal(k); },
+                    [this](const Key_t& k) { return this->immPreds(k); }
+                    );
+        }
+        Keys_t maximalSuccessors(const Key_t& key)
+        {
+            return reachableFilter(
+                    key,
+                    [this](const Key_t& k) { return this->isMaximal(k); },
+                    [this](const Key_t& k) { return this->immPreds(k); }
+                    );
+        }
+
+        bool isMinimal(const Key_t& key)
+        {
+            return predecessors(key).size() == 0;
+        }
+        bool isMaximal(const Key_t& key)
+        {
+            return successors(key).size() == 0;
+        }
         Keys_t minimalElements()
         {
             Keys_t res;
 
             for (auto& item : rep_) {
-                if (predecessors(item.first).size() == 0) {
+                if (isMinimal(item.first)) {
                     res.insert(item.first);
                 }
             }
@@ -60,7 +91,7 @@ class BidirectionalGraph {
             Keys_t res;
 
             for (auto& item : rep_) {
-                if (successors(item.first).size() == 0) {
+                if (isMaximal(item.first)) {
                     res.insert(item.first);
                 }
             }
@@ -93,12 +124,23 @@ class BidirectionalGraph {
             return std::get<2>(rep_[key]);
         }
 
-        template <typename Lambda>
-        Keys_t reachable(const Key_t& key, Lambda&& next)
+        template <typename Next>
+        Keys_t reachable(const Key_t& key, Next&& next)
+        {
+            return reachableFilter(key, [](const Key_t& x) { return true; } , next);
+        }
+
+        template <typename Filter, typename Next>
+        Keys_t reachableFilter(const Key_t& key, Filter&& filter, Next&& next)
         {
             Keys_t visited { key };
             std::queue<Key_t> tovisit;
             tovisit.push(key);
+
+            Keys_t result;
+            if (filter(key)) {
+                result.insert(key);
+            }
 
             while (! tovisit.empty()) {
                 auto& element = tovisit.front();
@@ -109,11 +151,15 @@ class BidirectionalGraph {
                     if (visited.count(item) == 0) {
                         tovisit.push(item);
                         visited.insert(item);
+
+                        if (filter(item)) {
+                            result.insert(item);
+                        }
                     }
                 }
             }
 
-            return visited;
+            return result;
         }
 };
 
