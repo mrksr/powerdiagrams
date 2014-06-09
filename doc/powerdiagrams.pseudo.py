@@ -65,7 +65,7 @@ class PowerDiagram:
         # poles are points
         poles = poles(spheres)
         # hull is an IncidenceLattice
-        hull = convexHull(points)
+        hull = convexHull(poles)
         # top, bottom are IncidenceLattices
         (top, bottom) = separate(hull)
 
