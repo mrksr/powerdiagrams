@@ -34,7 +34,7 @@ static VectorXd polarOfHyperplane(const VectorXd& normal, double offset)
 
     VectorXd res = normal;
     res *= 0.5;
-    res[last] = - offset;
+    res[last] = -offset;
     res *= -1.0 / normal[last];
 
     return res;
