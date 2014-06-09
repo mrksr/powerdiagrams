@@ -72,6 +72,8 @@ class IncidenceLattice {
             for (auto& item : face) {
                 rep_.insertEdge(item, key);
             }
+
+            return key;
         }
 
     private:
