@@ -1,3 +1,6 @@
+########################
+#  Project definition  #
+########################
 # set(CMAKE_BUILD_TYPE_INIT "Release")
 project(PowerDiagrams)
 
@@ -30,9 +33,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions("-Wall -Wextra -Wno-unused-parameter -pedantic")
 endif()
 
-##################
-#  Source Files  #
-##################
+###############################
+#  Source Files, Executables  #
+###############################
 include_directories(
     ${LIB_INCS}
     "${PROJECT_SOURCE_DIR}/include"
