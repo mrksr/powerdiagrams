@@ -9,7 +9,7 @@ typedef Eigen::MatrixXd MatrixXd;
 // FIXME: This vector is a fairly useless temporary object
 static VectorXd normal(const std::vector<VectorXd>& vectors)
 {
-    MatrixXd m(vectors.size(), vectors[0].rows());
+    MatrixXd m(vectors.size(), vectors[0].size());
     for (size_t i = 0; i < vectors.size(); ++i) {
         m.row(i) = vectors[i];
     }
@@ -23,14 +23,14 @@ static VectorXd polarOfSphere(const PowerDiagram::Sphere_t& sphere)
     double radius;
     std::tie(center, radius) = sphere;
 
-    VectorXd res(center.rows() + 1);
+    VectorXd res(center.size() + 1);
     res << center, center.dot(center) - radius * radius;
     return res;
 }
 
 static VectorXd polarOfHyperplane(const VectorXd& normal, double offset)
 {
-    const auto last = normal.rows() - 1;
+    const auto last = normal.size() - 1;
 
     VectorXd res = normal;
     res *= 0.5;
@@ -42,7 +42,7 @@ static VectorXd polarOfHyperplane(const VectorXd& normal, double offset)
 
 IncidenceLattice<VectorXd> PowerDiagram::fromSpheres(const std::vector<Sphere_t>& spheres)
 {
-    const auto dimension = std::get<0>(spheres[0]).rows();
+    const auto dimension = std::get<0>(spheres[0]).size();
 
     std::cout << "Spheres:" << std::endl;
     for (auto& item : spheres) {
