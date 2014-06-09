@@ -4,6 +4,11 @@
 #include "BidirectionalGraph.h"
 #include <map>
 
+/**
+ * @brief A datastructure containing incidences of faces in a d-dimensional polyhedron.
+ *
+ * @tparam Value_t (Vector-)Type describing 0- and d-faces.
+ */
 template <typename Value_t>
 class IncidenceLattice {
     typedef int Key_t;
@@ -28,7 +33,9 @@ class IncidenceLattice {
         }
         void value(const Key_t& key, const Value_t& value)
         {
+            keys_.erase(value(key));
             rep_.value(key, value);
+            keys_[value] = key;
         }
 
         Keys_t minimals()

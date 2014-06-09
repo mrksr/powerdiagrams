@@ -6,6 +6,19 @@
 #include <set>
 #include <tuple>
 
+/**
+ * @brief A datastructure containing a directed graph with efficient lookup in both directions.
+ *
+ * A BidirectionalGraph contains a directed graph. It is called BiDirectional
+ * because edges can be traversed in both directions efficiently.
+ * A BidirectionalGraph uses Keys as an index of the nodes and stores a Value
+ * in every node.
+ * A node is called minimal if it has no predecessors and maximal if it has no
+ * successors.
+ *
+ * @tparam Key_t Type of Objects used to index nodes.
+ * @tparam Value_t Type of Values stored in each node.
+ */
 template <typename Key_t, typename Value_t>
 class BidirectionalGraph {
     public:
