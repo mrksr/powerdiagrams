@@ -45,5 +45,3 @@ add_executable(powerdiagram
 target_link_libraries(powerdiagram
     ${LIB_LIBS}
     )
-
-message("${LIB_INCS}")
