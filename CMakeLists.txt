@@ -7,6 +7,12 @@ project(PowerDiagrams)
 cmake_minimum_required (VERSION 2.8.0)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 
+#############
+#  OPTIONS  #
+#############
+option(WITH_CGAL "Add CGAL convex hull algorithm" OFF)
+option(WITH_QHULL "Add qhull convex hull algorithm" ON)
+
 ###############
 #  Libraries  #
 ###############
@@ -19,10 +25,24 @@ if(EIGEN3_FOUND)
     list(APPEND LIB_LIBS ${EIGEN3_LIBRARIES})
 endif()
 
-find_package(CGAL REQUIRED)
-if (CGAL_FOUND)
-    list(APPEND LIB_INCS ${CGAL_INCLUDE_DIRS})
-    list(APPEND LIB_LIBS ${CGAL_LIBRARY})
+if(WITH_CGAL)
+    find_package(CGAL REQUIRED)
+    if (CGAL_FOUND)
+        list(APPEND LIB_INCS ${CGAL_INCLUDE_DIRS})
+        list(APPEND LIB_LIBS ${CGAL_LIBRARY})
+    endif()
+
+    add_definitions(-DHAVE_CGAL)
+endif()
+
+if(WITH_QHULL)
+    find_package(Qhull REQUIRED)
+    if(QHULL_FOUND)
+        list(APPEND LIB_INCS ${QHULL_INCLUDE_DIRS})
+        list(APPEND LIB_LIBS ${QHULL_LIBRARIES})
+    endif()
+
+    add_definitions(-DHAVE_QHULL)
 endif()
 
 ####################
