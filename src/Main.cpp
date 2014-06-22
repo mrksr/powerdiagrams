@@ -9,6 +9,20 @@
 int main(int argc, char *argv[])
 {
     {
+        // Qhull playground
+        std::vector<Eigen::VectorXd> points {
+            Eigen::Vector3d(1, 0, 0),
+            Eigen::Vector3d(0, 0, 1),
+            Eigen::Vector3d(1, 0, 1),
+            Eigen::Vector3d(0, 0, 2),
+            Eigen::Vector3d(2, 0, 0)
+        };
+
+        ConvexHullQhull conv;
+        conv.hullOf(points);
+    }
+    /*
+    {
         std::vector<PowerDiagram::Sphere_t> spheres {
             PowerDiagram::sphere(Eigen::Vector3d(1, 0, 0), 2),
             PowerDiagram::sphere(Eigen::Vector3d(0, 0, 1), 1),
@@ -31,5 +45,6 @@ int main(int argc, char *argv[])
         ConvexHullQhull conv;
         PowerDiagram::fromSpheres(conv, spheres);
     }
+    */
     return 0;
 }

@@ -2,7 +2,9 @@
 #define CONVEXHULLQHULL_H
 
 #include "ConvexHullAlgorithm.h"
+#include "IncidenceLattice.h"
 #include <Eigen/Dense>
+#include <vector>
 
 class ConvexHullQhull : public ConvexHullAlgorithm {
     public:
@@ -10,9 +12,7 @@ class ConvexHullQhull : public ConvexHullAlgorithm {
         virtual ~ConvexHullQhull() { }
 
 
-        virtual IncidenceLattice<Eigen::VectorXd> hullOf(const std::vector<Eigen::VectorXd>& points) {
-            return IncidenceLattice<Eigen::VectorXd>(Eigen::VectorXd::Zero(1));
-        }
+        virtual IncidenceLattice<Eigen::VectorXd> hullOf(const std::vector<Eigen::VectorXd>& points);
     private:
 };
 
