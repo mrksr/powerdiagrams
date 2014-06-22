@@ -33,6 +33,11 @@ class BidirectionalGraph {
         {
             return rep_.count(key) != 0;
         }
+        bool edgeExists(const Key_t& from, const Key_t& to) const
+        {
+            return nodeExists(from) && nodeExists(to) &&
+                immSuccs(from).find(to) != immSuccs(from).end();
+        }
 
         Value_t& value(const Key_t& key)
         {
@@ -116,6 +121,24 @@ class BidirectionalGraph {
             return res;
         }
 
+        template <typename Predicate>
+        void restrictTo(Predicate&& pred)
+        {
+            auto it = rep_.begin();
+
+            // Fairly hacky way to iterate over the map while deleting contents.
+            while(it != rep_.end()) {
+                if (!pred(it->first)) {
+                    auto toErase = it;
+                    ++it;
+
+                    deleteNode(toErase->first);
+                } else {
+                    ++it;
+                }
+            }
+        }
+
         void insertNode(const Key_t& key, const Value_t& value)
         {
             rep_[key] = std::make_tuple(value, Keys_t(), Keys_t());
@@ -126,6 +149,25 @@ class BidirectionalGraph {
             if (nodeExists(from) && nodeExists(to)) {
                 immSuccs(from).insert(to);
                 immPreds(to).insert(from);
+            }
+        }
+
+        void deleteNode(const Key_t& key)
+        {
+            for (auto& succ : immSuccs(key)) {
+                immPreds(succ).erase(key);
+            }
+            for (auto& pred : immPreds(key)) {
+                immSuccs(pred).erase(key);
+            }
+
+            rep_.erase(key);
+        }
+        void deleteEdge(const Key_t& from, const Key_t& to)
+        {
+            if (edgeExists(from, to)) {
+                immSuccs(from).erase(to);
+                immPreds(to).erase(from);
             }
         }
 
