@@ -18,25 +18,18 @@ class IncidenceLattice {
 
         IncidenceLattice(const Value_t& defaultValue):
             rep_(),
-            keys_(),
             nextKey_(0),
             defaultValue_(defaultValue)
         { }
         virtual ~IncidenceLattice() { }
 
-        Key_t key(const Value_t& value)
-        {
-            return keys_[value];
-        }
         Value_t value(const Key_t& key)
         {
             return rep_.value(key);
         }
         void value(const Key_t& key, const Value_t& value)
         {
-            keys_.erase(value(key));
             rep_.value(key, value);
-            keys_[value] = key;
         }
 
         Keys_t minimals()
@@ -91,7 +84,6 @@ class IncidenceLattice {
         {
             auto key = nextKey();
             rep_.insertNode(key, value);
-            keys_[value] = key;
 
             return key;
         }
@@ -109,7 +101,6 @@ class IncidenceLattice {
 
     private:
         BidirectionalGraph<Key_t, Value_t> rep_;
-        std::map<Value_t, Key_t> keys_;
         Key_t nextKey_;
         Value_t defaultValue_;
 
