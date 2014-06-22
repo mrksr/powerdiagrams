@@ -11,11 +11,10 @@ int main(int argc, char *argv[])
     {
         // Qhull playground
         std::vector<Eigen::VectorXd> points {
+            Eigen::Vector3d(0, 0, 0),
             Eigen::Vector3d(1, 0, 0),
-            Eigen::Vector3d(0, 0, 1),
-            Eigen::Vector3d(1, 0, 1),
-            Eigen::Vector3d(0, 0, 2),
-            Eigen::Vector3d(2, 0, 0)
+            Eigen::Vector3d(0, 1, 0),
+            Eigen::Vector3d(0, 0, 1)
         };
 
         ConvexHullQhull conv;
