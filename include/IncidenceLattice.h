@@ -2,6 +2,7 @@
 #define INCIDENCELATTICE_H
 
 #include "BidirectionalGraph.h"
+#include <algorithm>
 #include <map>
 
 /**
@@ -11,10 +12,10 @@
  */
 template <typename Value_t>
 class IncidenceLattice {
-    typedef int Key_t;
-    typedef typename BidirectionalGraph<Key_t, Value_t>::Keys_t Keys_t;
-
     public:
+        typedef int Key_t;
+        typedef typename BidirectionalGraph<Key_t, Value_t>::Keys_t Keys_t;
+
         IncidenceLattice(const Value_t& defaultValue):
             rep_(),
             keys_(),
@@ -54,6 +55,36 @@ class IncidenceLattice {
         Keys_t maximalsOf(const Key_t& key)
         {
             return rep_.maximalSuccessors(key);
+        }
+
+        // FIXME: Potentially (too) expensive set intersection.
+        void restrictToMaximals(const Keys_t& maximals)
+        {
+            rep_.restrictTo([maximals, this](const Key_t& k) {
+                    const auto& succs = this->rep_.maximalSuccessors(k);
+                    std::vector<Key_t> intersection;
+                    std::set_intersection(
+                        maximals.begin(),
+                        maximals.end(),
+                        succs.begin(),
+                        succs.end(),
+                        intersection.begin());
+                    return intersection.empty();
+                    });
+        }
+        void restrictToMinimals(const Keys_t& minimals)
+        {
+            rep_.restrictTo([minimals, this](const Key_t& k) {
+                    const auto& succs = this->rep_.minimalPredecessors(k);
+                    std::vector<Key_t> intersection;
+                    std::set_intersection(
+                        minimals.begin(),
+                        minimals.end(),
+                        succs.begin(),
+                        succs.end(),
+                        intersection.begin());
+                    return intersection.empty();
+                    });
         }
 
         Key_t addMinimal(const Value_t& value)
