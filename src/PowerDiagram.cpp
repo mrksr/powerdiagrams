@@ -1,13 +1,14 @@
 #include "PowerDiagram.h"
-
-#include <vector>
 #include <iostream>
+#include <libqhullcpp/Qhull.h>
+#include <map>
+#include <vector>
 
 typedef Eigen::VectorXd VectorXd;
 typedef Eigen::MatrixXd MatrixXd;
 
 // FIXME: This vector is a fairly useless temporary object
-static VectorXd normal(const std::vector<VectorXd>& vectors)
+static VectorXd normalToAll(const std::vector<VectorXd>& vectors)
 {
     MatrixXd m(vectors.size(), vectors[0].size());
     for (size_t i = 0; i < vectors.size(); ++i) {
@@ -15,6 +16,27 @@ static VectorXd normal(const std::vector<VectorXd>& vectors)
     }
 
     return m.fullPivLu().kernel().col(0).normalized();
+}
+
+// Since we assume the polytope to be fully dimensional, there has
+// to exist some point not in the facet. The dot product of the
+// normal and this point has to be smaller than zero if the normal
+// points outwards.
+static VectorXd outwardsNormal(const VectorXd& normal, const VectorXd& vertexOnFacet, const std::vector<VectorXd>& vertices)
+{
+    // FIXME: This might cause numerical issues.
+    const double epsilon = 1e-3;
+    for (auto& vertex : vertices) {
+        const auto dot = normal.dot(vertex - vertexOnFacet);
+        if (dot > epsilon) {
+            return (-1) * normal;
+        } else if (dot < epsilon) {
+            return normal;
+        }
+    }
+
+    // This should not happen
+    return normal;
 }
 
 static VectorXd polarOfSphere(const PowerDiagram::Sphere_t& sphere)
@@ -40,22 +62,53 @@ static VectorXd polarOfHyperplane(const VectorXd& normal, double offset)
     return res;
 }
 
-IncidenceLattice<VectorXd> PowerDiagram::fromSpheres(const std::vector<Sphere_t>& spheres)
+IncidenceLattice<VectorXd> PowerDiagram::fromSpheres(ConvexHullAlgorithm& hull, const std::vector<Sphere_t>& spheres)
 {
     const auto dimension = std::get<0>(spheres[0]).size();
 
-    std::cout << "Spheres:" << std::endl;
-    for (auto& item : spheres) {
-        std::cout << "Center: " << std::get<0>(item).transpose() << " - Radius: " << std::get<1>(item) << std::endl;
+    // Find polars
+    std::vector<VectorXd> polars(spheres.size());
+    std::transform(spheres.begin(), spheres.end(), polars.begin(), [](Sphere_t sphere) {
+            return polarOfSphere(sphere);
+        });
+
+    // Calculate their convex hull
+    auto dualIncidences = hull.hullOf(polars);
+
+    // Calculate normals of the hyperplanes (facets),
+    // Restrict the incidence lattice to the facets on the bottom side
+    std::set<decltype(dualIncidences)::Key_t> bottoms;
+    for (auto& facet : dualIncidences.maximals()) {
+        std::vector<VectorXd> facetPoints;
+        for (auto& key : dualIncidences.minimalsOf(facet)) {
+            facetPoints.push_back(dualIncidences.value(key));
+        }
+
+        // Find any normal
+        auto normal = normalToAll(facetPoints);
+
+        // Make sure the normal points outwards
+        normal = outwardsNormal(normal, facetPoints[0], polars);
+
+        // Save normal in incidence lattice
+        dualIncidences.value(facet) = normal;
+
+        if (normal[dimension - 1] < 0) {
+            bottoms.insert(facet);
+        }
+    }
+    dualIncidences.restrictToMaximals(bottoms);
+
+    // Calculate the dual (i.e. project the hyperplanes),
+    // project the dual points onto H0 (i.e. forget last coordinate)
+    for (auto& facet : dualIncidences.maximals()) {
+        const auto normal = dualIncidences.value(facet);
+        const auto vertex = *dualIncidences.minimalsOf(facet).begin();
+        const double offset = normal.dot(dualIncidences.value(vertex));
+
+        const auto polar = polarOfHyperplane(normal, offset);
+        dualIncidences.value(facet, polar.head(dimension));
     }
 
-    std::vector<VectorXd> vecs(spheres.size());
-    std::transform(spheres.begin(), spheres.end(), vecs.begin(), [](Sphere_t tup) { return std::get<0>(tup); });
-    auto n = normal(vecs);
-    std::cout << "Normal to all sphere centers:" << std::endl << n << std::endl;
-
-    std::cout << "Polar of first Sphere:" << std::endl << polarOfSphere(spheres[0]) << std::endl;
-    std::cout << "Polar of Plain with Normal (0,1,2) through 1:" << std::endl << polarOfHyperplane(Eigen::Vector3d(0, 1, 2), 1) << std::endl;
-
-    return IncidenceLattice<VectorXd>(VectorXd::Zero(dimension));
+    return dualIncidences;
 }
