@@ -1,6 +1,5 @@
 #include "PowerDiagram.h"
 #include <iostream>
-#include <libqhullcpp/Qhull.h>
 #include <map>
 #include <vector>
 
