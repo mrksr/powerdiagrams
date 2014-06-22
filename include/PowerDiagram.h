@@ -1,10 +1,11 @@
 #ifndef POWERDIAGRAM_H
 #define POWERDIAGRAM_H
 
+#include "ConvexHullAlgorithm.h"
 #include "IncidenceLattice.h"
 #include <Eigen/Dense>
-#include <vector>
 #include <tuple>
+#include <vector>
 
 class PowerDiagram {
     public:
@@ -16,7 +17,7 @@ class PowerDiagram {
         {
             return std::make_tuple(center, radius);
         }
-        static IncidenceLattice<Eigen::VectorXd> fromSpheres(const std::vector<Sphere_t>& spheres);
+        static IncidenceLattice<Eigen::VectorXd> fromSpheres(ConvexHullAlgorithm& hull, const std::vector<Sphere_t>& spheres);
 
     private:
         PowerDiagram();
