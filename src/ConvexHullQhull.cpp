@@ -23,29 +23,25 @@ IncidenceLattice<Eigen::VectorXd> ConvexHullQhull::hullOf(const std::vector<Eige
         }
     }
 
-    /* orgQhull::Qhull qhull; */
-    /* qhull.setErrorStream(&std::cerr); */
-    /* qhull.setOutputStream(&std::cout); */
-    /* qhull.useOutputStream = true; */
+    orgQhull::Qhull qhull;
+    qhull.setErrorStream(&std::cerr);
+    qhull.setOutputStream(&std::cout);
+    qhull.useOutputStream = true;
 
     /* std::cout << qhull.qhullStatus() << std::endl; */
 
-    /* qhull.runQhull("", dimension, points.size(), qhullpoints, "s"); */
+    qhull.runQhull("", dimension, points.size(), qhullpoints, "s");
 
-    // FIXME: This simple hull does not work :(
-    orgQhull::RboxPoints rbox;
-    rbox.appendPoints("10");
-    orgQhull::Qhull qhull(rbox, "s");
-
-    std::cout << qhull.qhullStatus() << std::endl;
-    std::cout << "Vertices (" << qhull.vertexCount() << "): " << std::endl << qhull.vertexList();
-    if (qhull.hasQhullMessage()) {
-        std::cout << "----" << std::endl << "Message:" << std::endl;
-        std::cout << qhull.qhullMessage() << std::endl;
-    }
+    /* std::cout << qhull.qhullStatus() << std::endl; */
+    /* std::cout << "Vertices (" << qhull.vertexCount() << "): " << std::endl << qhull.vertexList(); */
+    /* if (qhull.hasQhullMessage()) { */
+    /*     std::cout << "----" << std::endl << "Message:" << std::endl; */
+    /*     std::cout << qhull.qhullMessage() << std::endl; */
+    /* } */
 
     delete[] qhullpoints;
 
+    // TODO: Create lattice from qhull
     IncidenceLattice<Eigen::VectorXd> lattice(Eigen::VectorXd::Zero(1));
     return lattice;
 }
