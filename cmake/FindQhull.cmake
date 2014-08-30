@@ -12,7 +12,7 @@
 set(QHULL_MAJOR_VERSION 6)
 
 if(QHULL_USE_STATIC)
-  set(QHULL_RELEASE_NAME qhullstatic)
+  set(QHULL_RELEASE_NAME qhullstatic_p)
   set(QHULL_DEBUG_NAME qhullstatic_d)
 
   set(QHULL_RELEASE_NAME_CPP qhullcpp)
@@ -87,8 +87,10 @@ mark_as_advanced(QHULL_LIBRARY QHULL_LIBRARY_DEBUG QHULL_INCLUDE_DIR)
 
 if(QHULL_FOUND)
   set(HAVE_QHULL ON)
+  # FIXME: Why do I have to set this for non-static as well?
+  add_definitions("-Dqh_QHpointer")
+
   if(NOT QHULL_USE_STATIC)
-    add_definitions("-Dqh_QHpointer")
     if(MSVC)
       add_definitions("-Dqh_QHpointer_dllimport")
     endif(MSVC)
