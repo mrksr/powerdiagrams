@@ -30,4 +30,4 @@ multi:
 
 .PHONY: run
 run: dbg
-	cd $(DEBUG); ./powerdiagram
+	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_small_sites.csv ./examples/pd_bsp_2dCells_small_gamma.csv

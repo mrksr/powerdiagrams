@@ -1,0 +1,63 @@
+#include "FromCSV.h"
+#include <Eigen/Dense>
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+typedef Eigen::VectorXd VectorXd;
+typedef Eigen::MatrixXd MatrixXd;
+
+VectorXd nextCenter(std::istream& centerStream)
+{
+    // Yes, this is actually ugly.
+    std::string line;
+    std::cout << line << std::endl;
+    std::getline(centerStream, line);
+
+    std::istringstream lineStream(line);
+    std::string cell;
+
+    std::vector<double> entries;
+    double value;
+    while(std::getline(lineStream,cell,','))
+    {
+        std::istringstream cellStream(cell);
+        cellStream >> value;
+        entries.push_back(value);
+    }
+
+    VectorXd result(entries.size());
+    for (size_t i = 0; i < entries.size(); ++i) {
+        result[i] = entries[i];
+    }
+    return result;
+}
+
+double nextRadius(std::istream& radiusStream)
+{
+    std::string line;
+    std::getline(radiusStream, line);
+
+    std::istringstream lineStream(line);
+    double result;
+    lineStream >> result;
+    return result;
+}
+
+std::vector<PowerDiagram::Sphere_t> FromCSV::spheres(const char* centers, const char* radiuss)
+{
+    std::vector<PowerDiagram::Sphere_t> spheres;
+
+    std::ifstream centerStream(centers);
+    std::ifstream radiusStream(radiuss);
+
+    while(centerStream.good() && radiusStream.good()) {
+        spheres.push_back(
+                PowerDiagram::sphere(
+                    nextCenter(centerStream),
+                    nextRadius(radiusStream)
+                ));
+    }
+
+    return spheres;
+}

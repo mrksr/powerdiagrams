@@ -1,4 +1,5 @@
 #include "ConvexHullQhull.h"
+#include "FromCSV.h"
 #include "PowerDiagram.h"
 #include <Eigen/Dense>
 #include <iostream>
@@ -6,29 +7,18 @@
 #include <tuple>
 #include <string>
 
+void printUsage()
+{
+    std::cout << "Usage: ./powerdiagrams <centers> <radii>" << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
-    {
-        // Qhull playground
-        std::vector<Eigen::VectorXd> points {
-            Eigen::Vector3d(0, 0, 0),
-            Eigen::Vector3d(1, 0, 0),
-            Eigen::Vector3d(0, 1, 0),
-            Eigen::Vector3d(0, 0, 1)
-        };
-
-        ConvexHullQhull conv;
-        conv.hullOf(points);
-    }
-    /*
-    {
-        std::vector<PowerDiagram::Sphere_t> spheres {
-            PowerDiagram::sphere(Eigen::Vector3d(1, 0, 0), 2),
-            PowerDiagram::sphere(Eigen::Vector3d(0, 0, 1), 1),
-            PowerDiagram::sphere(Eigen::Vector3d(1, 0, 1), 1),
-            PowerDiagram::sphere(Eigen::Vector3d(0, 0, 2), 1),
-            PowerDiagram::sphere(Eigen::Vector3d(2, 0, 0), 1)
-        };
+    if (argc < 3) {
+        printUsage();
+        return 1;
+    } else {
+        const auto& spheres = FromCSV::spheres(argv[1], argv[2]);
 
         std::cout << "Spheres:" << std::endl;
         for (auto& item : spheres) {
@@ -43,7 +33,7 @@ int main(int argc, char *argv[])
 
         ConvexHullQhull conv;
         PowerDiagram::fromSpheres(conv, spheres);
+
+        return 0;
     }
-    */
-    return 0;
 }
