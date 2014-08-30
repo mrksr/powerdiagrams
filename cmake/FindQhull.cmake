@@ -90,10 +90,9 @@ if(QHULL_FOUND)
   # FIXME: Why do I have to set this for non-static as well?
   add_definitions("-Dqh_QHpointer")
 
-  if(NOT QHULL_USE_STATIC)
-    if(MSVC)
+  if(MSVC)
       add_definitions("-Dqh_QHpointer_dllimport")
-    endif(MSVC)
-  endif(NOT QHULL_USE_STATIC)
+  endif(MSVC)
+
   message(STATUS "QHULL found (include: ${QHULL_INCLUDE_DIRS}, lib: ${QHULL_LIBRARIES})")
 endif(QHULL_FOUND)
