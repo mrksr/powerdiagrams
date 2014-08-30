@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
         std::cout << std::endl << std::endl;
 
         ConvexHullQhull conv;
-        PowerDiagram::fromSpheres(conv, spheres);
+        auto diagram = PowerDiagram::fromSpheres(conv, spheres);
+        std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
 
         return 0;
     }
