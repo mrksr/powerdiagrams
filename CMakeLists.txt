@@ -36,10 +36,14 @@ if(WITH_CGAL)
 endif()
 
 if(WITH_QHULL)
+    # FIXME: Non-static build breaks qhull
+    set(QHULL_USE_STATIC 1)
+
     find_package(Qhull REQUIRED)
     if(QHULL_FOUND)
         list(APPEND LIB_INCS ${QHULL_INCLUDE_DIRS})
-        list(APPEND LIB_LIBS ${QHULL_LIBRARIES})
+        list(APPEND LIB_LIBS ${QHULL_LIBRARY_CPP})
+        list(APPEND LIB_LIBS ${QHULL_LIBRARY})
     endif()
 
     add_definitions(-DHAVE_QHULL)
