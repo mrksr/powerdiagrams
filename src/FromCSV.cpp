@@ -11,7 +11,6 @@ VectorXd nextCenter(std::istream& centerStream)
 {
     // Yes, this is actually ugly.
     std::string line;
-    std::cout << line << std::endl;
     std::getline(centerStream, line);
 
     std::istringstream lineStream(line);
@@ -19,7 +18,7 @@ VectorXd nextCenter(std::istream& centerStream)
 
     std::vector<double> entries;
     double value;
-    while(std::getline(lineStream,cell,','))
+    while (std::getline(lineStream,cell,','))
     {
         std::istringstream cellStream(cell);
         cellStream >> value;
@@ -51,12 +50,13 @@ std::vector<PowerDiagram::Sphere_t> FromCSV::spheres(const char* centers, const 
     std::ifstream centerStream(centers);
     std::ifstream radiusStream(radiuss);
 
-    while(centerStream.good() && radiusStream.good()) {
-        spheres.push_back(
-                PowerDiagram::sphere(
-                    nextCenter(centerStream),
-                    nextRadius(radiusStream)
-                ));
+    while (centerStream.good() && radiusStream.good()) {
+        auto center = nextCenter(centerStream);
+        auto radius = nextRadius(radiusStream);
+
+        if (center.size() > 0) {
+            spheres.push_back(PowerDiagram::sphere( center, radius));
+        }
     }
 
     return spheres;
