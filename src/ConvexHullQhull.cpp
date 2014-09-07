@@ -7,7 +7,12 @@
 #include <libqhullcpp/QhullLinkedList.h>
 #include <libqhullcpp/QhullQh.h>
 #include <libqhullcpp/QhullVertex.h>
+#include <libqhullcpp/QhullVertexSet.h>
 #include <libqhullcpp/RboxPoints.h>
+#include <map>
+#include <set>
+
+typedef int qhullID_t;
 
 IncidenceLattice<Eigen::VectorXd> ConvexHullQhull::hullOf(const std::vector<Eigen::VectorXd>& points)
 {
@@ -24,24 +29,40 @@ IncidenceLattice<Eigen::VectorXd> ConvexHullQhull::hullOf(const std::vector<Eige
     }
 
     orgQhull::Qhull qhull;
+#ifdef _VERBOSE_
     qhull.setErrorStream(&std::cerr);
     qhull.setOutputStream(&std::cout);
     qhull.useOutputStream = true;
+#endif
 
-    /* std::cout << qhull.qhullStatus() << std::endl; */
-
+    // Find convex hull
     qhull.runQhull("", dimension, points.size(), qhullpoints, "s");
 
-    /* std::cout << qhull.qhullStatus() << std::endl; */
-    /* std::cout << "Vertices (" << qhull.vertexCount() << "): " << std::endl << qhull.vertexList(); */
-    /* if (qhull.hasQhullMessage()) { */
-    /*     std::cout << "----" << std::endl << "Message:" << std::endl; */
-    /*     std::cout << qhull.qhullMessage() << std::endl; */
-    /* } */
+#ifdef _VERBOSE_
+    std::cout << qhull.qhullStatus() << std::endl;
+    std::cout << "Vertices (" << qhull.vertexCount() << "): " << std::endl << qhull.vertexList();
+    std::cout << "Facets (" << qhull.facetCount() << "): " << std::endl << qhull.facetList();
+#endif
+
+    // Create incidence lattice
+    IncidenceLattice<Eigen::VectorXd> lattice(Eigen::VectorXd::Zero(dimension));
+    std::map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
+
+    for (auto& facet : qhull.facetList().toStdVector()) {
+        std::set<decltype(lattice)::Key_t> vertices;
+
+        for (auto& vertex : facet.vertices()) {
+            const auto id = vertex.point().id(qhull.runId());
+            if (vertexMap.count(id) <= 0) {
+                vertexMap[id] = lattice.addMinimal(points[id]);
+            }
+
+            vertices.insert(vertexMap[id]);
+        }
+
+        lattice.addFace(vertices);
+    }
 
     delete[] qhullpoints;
-
-    // TODO: Create lattice from qhull
-    IncidenceLattice<Eigen::VectorXd> lattice(Eigen::VectorXd::Zero(1));
     return lattice;
 }

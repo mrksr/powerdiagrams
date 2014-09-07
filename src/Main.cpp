@@ -7,6 +7,8 @@
 #include <tuple>
 #include <string>
 
+/* #define _VERBOSE_ */
+
 void printUsage()
 {
     std::cout << "Usage: ./powerdiagrams <centers> <radii>" << std::endl;
@@ -20,6 +22,7 @@ int main(int argc, char *argv[])
     } else {
         const auto& spheres = FromCSV::spheres(argv[1], argv[2]);
 
+#ifdef _VERBOSE_
         std::cout << "Spheres:" << std::endl;
         for (auto& item : spheres) {
             std::cout
@@ -30,6 +33,7 @@ int main(int argc, char *argv[])
                 << std::endl;
         }
         std::cout << std::endl << std::endl;
+#endif
 
         ConvexHullQhull conv;
         auto diagram = PowerDiagram::fromSpheres(conv, spheres);

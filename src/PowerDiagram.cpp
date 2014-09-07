@@ -71,9 +71,11 @@ IncidenceLattice<VectorXd> PowerDiagram::fromSpheres(ConvexHullAlgorithm& hull, 
             return polarOfSphere(sphere);
         });
 
+#ifdef _VERBOSE_
     for (auto& polar : polars) {
         std::cout << "Polar point: " << polar.transpose() << std::endl;
     }
+#endif
 
     // Calculate their convex hull
     auto dualIncidences = hull.hullOf(polars);
