@@ -55,6 +55,9 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions("-std=c++11")
     add_definitions("-Wall -Wextra -Wno-unused-parameter -pedantic")
+elseif(__COMPILER_CLANG)
+    add_definitions("-std=c++11")
+    add_definitions("-Wall -pedantic")
 endif()
 
 ###############################
