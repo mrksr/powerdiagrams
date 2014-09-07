@@ -28,6 +28,13 @@ multi:
 	$(MAKE) clean $(RELEASE) $(DEBUG)
 	$(MAKE) all -j 4
 
-.PHONY: run
-run: dbg
+.PHONY: 2d
+2d: dbg
 	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_small_sites.csv ./examples/pd_bsp_2dCells_small_gamma.csv
+
+.PHONY: simple
+simple: dbg
+	$(DEBUG)/powerdiagram ./examples/simple_sites.csv ./examples/simple_gamma.csv
+
+.PHONY: run
+run: 2d
