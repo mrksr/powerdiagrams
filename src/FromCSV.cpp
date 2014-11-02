@@ -1,7 +1,8 @@
 #include "FromCSV.h"
 #include <Eigen/Dense>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <sstream>
 #include <vector>
 
 typedef Eigen::VectorXd VectorXd;
@@ -18,8 +19,7 @@ VectorXd nextCenter(std::istream& centerStream)
 
     std::vector<double> entries;
     double value;
-    while (std::getline(lineStream,cell,','))
-    {
+    while (std::getline(lineStream,cell,',')) {
         std::istringstream cellStream(cell);
         cellStream >> value;
         entries.push_back(value);

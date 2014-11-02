@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
 {
     if (argc < 3) {
         printUsage();
+
         return 1;
     } else {
         const auto& spheres = FromCSV::spheres(argv[1], argv[2]);
