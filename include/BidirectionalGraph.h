@@ -84,7 +84,7 @@ class BidirectionalGraph {
             return reachableFilter(
                     key,
                     [this](const Key_t& k) { return this->isMaximal(k); },
-                    [this](const Key_t& k) { return this->immPreds(k); }
+                    [this](const Key_t& k) { return this->immSuccs(k); }
                     );
         }
 
@@ -186,7 +186,10 @@ class BidirectionalGraph {
         template <typename Next>
         Keys_t reachable(const Key_t& key, Next&& next)
         {
-            return reachableFilter(key, [](const Key_t& x) { return true; } , next);
+            return reachableFilter(key,
+                    [](const Key_t& x) { return true; },
+                    std::forward<Next>(next)
+                    );
         }
 
         template <typename Filter, typename Next>
