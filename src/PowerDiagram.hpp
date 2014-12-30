@@ -1,8 +1,8 @@
 #ifndef POWERDIAGRAM_H
 #define POWERDIAGRAM_H
 
-#include "ConvexHullAlgorithm.h"
-#include "IncidenceLattice.h"
+#include "ConvexHullAlgorithm.hpp"
+#include "IncidenceLattice.hpp"
 #include <Eigen/Dense>
 #include <tuple>
 #include <vector>

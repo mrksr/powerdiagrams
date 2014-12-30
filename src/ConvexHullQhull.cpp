@@ -1,4 +1,4 @@
-#include "ConvexHullQhull.h"
+#include "ConvexHullQhull.hpp"
 #include <iostream>
 #include <libqhullcpp/Qhull.h>
 #include <libqhullcpp/QhullError.h>

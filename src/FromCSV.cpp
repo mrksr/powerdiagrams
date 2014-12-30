@@ -1,4 +1,4 @@
-#include "FromCSV.h"
+#include "FromCSV.hpp"
 #include <Eigen/Dense>
 #include <fstream>
 #include <iostream>

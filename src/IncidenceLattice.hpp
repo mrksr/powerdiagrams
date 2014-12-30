@@ -1,7 +1,7 @@
 #ifndef INCIDENCELATTICE_H
 #define INCIDENCELATTICE_H
 
-#include "BidirectionalGraph.h"
+#include "BidirectionalGraph.hpp"
 #include <algorithm>
 #include <map>
 

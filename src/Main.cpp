@@ -1,6 +1,6 @@
-#include "ConvexHullQhull.h"
-#include "FromCSV.h"
-#include "PowerDiagram.h"
+#include "ConvexHullQhull.hpp"
+#include "FromCSV.hpp"
+#include "PowerDiagram.hpp"
 #include <Eigen/Dense>
 #include <iostream>
 #include <vector>

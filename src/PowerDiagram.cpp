@@ -1,4 +1,4 @@
-#include "PowerDiagram.h"
+#include "PowerDiagram.hpp"
 #include <iostream>
 #include <map>
 #include <vector>

@@ -1,7 +1,7 @@
 #ifndef CONVEXHULLALGORITHM_H
 #define CONVEXHULLALGORITHM_H
 
-#include "IncidenceLattice.h"
+#include "IncidenceLattice.hpp"
 #include <Eigen/Dense>
 #include <vector>
 

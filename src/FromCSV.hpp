@@ -1,7 +1,7 @@
 #ifndef FROMCSV_H
 #define FROMCSV_H
 
-#include "PowerDiagram.h"
+#include "PowerDiagram.hpp"
 #include <vector>
 
 class FromCSV {
