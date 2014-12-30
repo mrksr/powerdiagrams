@@ -8,16 +8,15 @@
 #include <tuple>
 #include <vector>
 
-class PowerDiagramDual {
+class PowerDiagramDual : public PowerDiagram {
     public:
-        typedef PowerDiagram::Sphere_t Sphere_t;
-
-        PowerDiagramDual() { }
+        PowerDiagramDual(ConvexHullAlgorithm& hull) : hull_(hull) { }
         virtual ~PowerDiagramDual() { }
 
-        virtual IncidenceLattice<Eigen::VectorXd> fromSpheres(ConvexHullAlgorithm& hull, const std::vector<PowerDiagram::Sphere_t>& spheres);
+        virtual IncidenceLattice<Eigen::VectorXd> fromSpheres(const std::vector<PowerDiagram::Sphere_t>& spheres);
 
     private:
+        ConvexHullAlgorithm& hull_;
 };
 
 #endif

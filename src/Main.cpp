@@ -1,6 +1,7 @@
 #include "ConvexHullQhull.hpp"
 #include "FromCSV.hpp"
 #include "PowerDiagramDual.hpp"
+#include "PowerDiagramNaive.hpp"
 #include <Eigen/Dense>
 #include <iostream>
 #include <vector>
@@ -36,10 +37,20 @@ int main(int argc, char *argv[])
         std::cout << std::endl << std::endl;
 #endif
 
-        ConvexHullQhull conv;
-        PowerDiagramDual dual;
-        auto diagram = dual.fromSpheres(conv, spheres);
-        std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
+        std::cout << "Dual algorithm:" << std::endl;
+        {
+            ConvexHullQhull conv;
+            PowerDiagramDual dual(conv);
+            auto diagram = dual.fromSpheres(spheres);
+            std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
+        }
+
+        std::cout << "Naive algorithm:" << std::endl;
+        {
+            PowerDiagramNaive naive;
+            auto diagram = naive.fromSpheres(spheres);
+            std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
+        }
 
         return 0;
     }

@@ -17,10 +17,10 @@ class PowerDiagram {
         {
             return std::make_tuple(center, radius);
         }
-        virtual IncidenceLattice<Eigen::VectorXd> fromSpheres(ConvexHullAlgorithm& hull, const std::vector<Sphere_t>& spheres) = 0;
+        virtual IncidenceLattice<Eigen::VectorXd> fromSpheres(const std::vector<Sphere_t>& spheres) = 0;
 
-    private:
-        PowerDiagram();
+    protected:
+        PowerDiagram() { }
 };
 
 #endif

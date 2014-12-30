@@ -61,7 +61,7 @@ static VectorXd polarOfHyperplane(const VectorXd& normal, double offset)
     return res;
 }
 
-IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(ConvexHullAlgorithm& hull, const std::vector<Sphere_t>& spheres)
+IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Sphere_t>& spheres)
 {
     const auto dimension = std::get<0>(spheres[0]).size();
 
@@ -78,7 +78,7 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(ConvexHullAlgorithm& hu
 #endif
 
     // Calculate their convex hull
-    auto dualIncidences = hull.hullOf(polars);
+    auto dualIncidences = hull_.hullOf(polars);
 
     // Calculate normals of the hyperplanes (facets),
     // Restrict the incidence lattice to the facets on the bottom side
