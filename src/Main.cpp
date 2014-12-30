@@ -1,13 +1,13 @@
 #include "ConvexHullQhull.hpp"
 #include "FromCSV.hpp"
-#include "PowerDiagram.hpp"
+#include "PowerDiagramDual.hpp"
 #include <Eigen/Dense>
 #include <iostream>
 #include <vector>
 #include <tuple>
 #include <string>
 
-/* #define _VERBOSE_ */
+#define _VERBOSE_
 
 void printUsage()
 {
@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
 #endif
 
         ConvexHullQhull conv;
-        auto diagram = PowerDiagram::fromSpheres(conv, spheres);
+        PowerDiagramDual dual;
+        auto diagram = dual.fromSpheres(conv, spheres);
         std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
 
         return 0;

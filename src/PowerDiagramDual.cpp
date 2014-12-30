@@ -1,4 +1,4 @@
-#include "PowerDiagram.hpp"
+#include "PowerDiagramDual.hpp"
 #include <iostream>
 #include <map>
 #include <vector>
@@ -61,7 +61,7 @@ static VectorXd polarOfHyperplane(const VectorXd& normal, double offset)
     return res;
 }
 
-IncidenceLattice<VectorXd> PowerDiagram::fromSpheres(ConvexHullAlgorithm& hull, const std::vector<Sphere_t>& spheres)
+IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(ConvexHullAlgorithm& hull, const std::vector<Sphere_t>& spheres)
 {
     const auto dimension = std::get<0>(spheres[0]).size();
 
