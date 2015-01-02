@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
             std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
         }
 
+        std::cout << std::endl << std::endl;
         std::cout << "Naive algorithm:" << std::endl;
         {
             PowerDiagramNaive naive;
