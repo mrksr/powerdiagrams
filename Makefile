@@ -28,9 +28,17 @@ multi:
 	$(MAKE) clean $(RELEASE) $(DEBUG)
 	$(MAKE) all -j 4
 
+.PHONY: 2dsmall
+2dsmall: dbg
+	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_small_sites.csv ./examples/pd_bsp_2dCells_small_gamma.csv
+
 .PHONY: 2d
 2d: dbg
-	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_small_sites.csv ./examples/pd_bsp_2dCells_small_gamma.csv
+	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_sites.csv ./examples/pd_bsp_2dCells_gamma.csv
+
+.PHONY: wine
+wine: dbg
+	$(DEBUG)/powerdiagram ./examples/pd_bsp_wine_sites.csv ./examples/pd_bsp_wine_gamma.csv
 
 .PHONY: simple
 simple: dbg
