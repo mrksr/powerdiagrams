@@ -11,7 +11,7 @@ typedef std::tuple<VectorXd, double> Hyperplane_t;
 static std::pair<bool, VectorXd> possible0Face(const std::vector<Sphere_t>& spheres, const std::vector<size_t>& group)
 {
     std::vector<std::vector<size_t>> pairs;
-    AllChoices::indexTuplesOfLength<size_t>(2, group.begin(), group.end(), std::back_inserter(pairs));
+    AllChoices::indexGroupsOfLength<size_t>(2, group.begin(), group.end(), std::back_inserter(pairs));
 
     std::vector<Hyperplane_t> planes(pairs.size());
     std::transform(pairs.begin(), pairs.end(), planes.begin(),
@@ -60,21 +60,7 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
 {
     const size_t dim = std::get<0>(spheres[0]).size();
     std::vector<std::vector<size_t>> groups;
-    AllChoices::indexTuplesOfLength<size_t>(dim, spheres.begin(), spheres.end(), std::back_inserter(groups));
-
-    /* for (auto& group : groups) { */
-    /*     std::cout << "For sphere indices: "; */
-    /*     for (auto& i : group) { */
-    /*         std::cout << " " << i; */
-    /*     } */
-    /*     std::cout << std::endl; */
-
-    /*     const auto point = possible0Face(spheres, group).second; */
-    /*     std::cout << "Possible 0Face: " << point.transpose() << std::endl; */
-
-    /*     const auto valid = is0Face(spheres, group, point); */
-    /*     std::cout << "Is a 0Face: " << valid<< std::endl; */
-    /* } */
+    AllChoices::indexGroupsOfLength<size_t>(dim, spheres.begin(), spheres.end(), std::back_inserter(groups));
 
     for (auto& group : groups) {
         bool hasSolution;

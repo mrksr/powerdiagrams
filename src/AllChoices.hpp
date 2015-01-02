@@ -10,7 +10,7 @@ class AllChoices {
         virtual ~AllChoices() { }
 
         template<typename index_t, typename InputIt, typename OutputIt>
-        static OutputIt indexTuplesOfLength(
+        static OutputIt indexGroupsOfLength(
                 size_t length,
                 InputIt first,
                 InputIt last,
@@ -18,24 +18,24 @@ class AllChoices {
         {
             std::vector<index_t> indices(std::distance(first, last));
             std::iota(indices.begin(), indices.end(), 0);
-            return tuplesOfLengthPrepend(length, indices.begin(), indices.end(), d_first, {});
+            return groupsOfLengthPrepend(length, indices.begin(), indices.end(), d_first, {});
         }
 
         template<typename InputIt, typename OutputIt>
-        static OutputIt tuplesOfLength(
+        static OutputIt groupsOfLength(
                 size_t length,
                 InputIt first,
                 InputIt last,
                 OutputIt d_first)
         {
-            return tuplesOfLengthPrepend(length, first, last, d_first, {});
+            return groupsOfLengthPrepend(length, first, last, d_first, {});
         }
 
     private:
         AllChoices();
 
         template<typename InputIt, typename OutputIt>
-        static OutputIt tuplesOfLengthPrepend(
+        static OutputIt groupsOfLengthPrepend(
                 size_t length,
                 InputIt first,
                 InputIt last,
@@ -67,7 +67,7 @@ class AllChoices {
                     nextPrepend[lastIndex] = *it;
                     ++it;
 
-                    d_first = tuplesOfLengthPrepend(length - 1, it, last, d_first, nextPrepend);
+                    d_first = groupsOfLengthPrepend(length - 1, it, last, d_first, nextPrepend);
                 }
 
                 return d_first;
