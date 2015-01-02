@@ -17,6 +17,16 @@ class PowerDiagram {
         {
             return std::make_tuple(center, radius);
         }
+        static double power(const Sphere_t& sphere, const Eigen::VectorXd& point)
+        {
+            Eigen::VectorXd center;
+            double radius;
+            std::tie(center, radius) = sphere;
+
+            const auto diff = center - point;
+            return diff.dot(diff) - radius * radius;
+        }
+
         virtual IncidenceLattice<Eigen::VectorXd> fromSpheres(const std::vector<Sphere_t>& spheres) = 0;
 
     protected:
