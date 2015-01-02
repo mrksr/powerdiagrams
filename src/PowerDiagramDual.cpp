@@ -9,12 +9,12 @@ typedef Eigen::MatrixXd MatrixXd;
 // FIXME: This vector is a fairly useless temporary object
 static VectorXd normalToAll(const std::vector<VectorXd>& vectors)
 {
-    MatrixXd m(vectors.size(), vectors[0].size());
+    MatrixXd A(vectors.size(), vectors[0].size());
     for (size_t i = 0; i < vectors.size(); ++i) {
-        m.row(i) = vectors[i];
+        A.row(i) = vectors[i];
     }
 
-    return m.fullPivLu().kernel().col(0).normalized();
+    return A.fullPivLu().kernel().col(0).normalized();
 }
 
 // Since we assume the polytope to be fully dimensional, there has
