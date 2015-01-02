@@ -1,6 +1,7 @@
 #ifndef ALLCHOICES_H
 #define ALLCHOICES_H
 
+#include <algorithm>
 #include <cstddef>
 #include <vector>
 
@@ -8,14 +9,26 @@ class AllChoices {
     public:
         virtual ~AllChoices() { }
 
-        template<typename InputIt, typename OutputIt>
-        static OutputIt tuplesOfLength(
+        template<typename index_t, typename InputIt, typename OutputIt>
+        static OutputIt indexTuplesOfLength(
+                size_t length,
                 InputIt first,
                 InputIt last,
-                OutputIt d_first,
-                size_t length)
+                OutputIt d_first)
         {
-            return tuplesOfLengthPrepend(first, last, d_first, length, {});
+            std::vector<index_t> indices(std::distance(first, last));
+            std::iota(indices.begin(), indices.end(), 0);
+            return tuplesOfLengthPrepend(length, indices.begin(), indices.end(), d_first, {});
+        }
+
+        template<typename InputIt, typename OutputIt>
+        static OutputIt tuplesOfLength(
+                size_t length,
+                InputIt first,
+                InputIt last,
+                OutputIt d_first)
+        {
+            return tuplesOfLengthPrepend(length, first, last, d_first, {});
         }
 
     private:
@@ -23,10 +36,10 @@ class AllChoices {
 
         template<typename InputIt, typename OutputIt>
         static OutputIt tuplesOfLengthPrepend(
+                size_t length,
                 InputIt first,
                 InputIt last,
                 OutputIt d_first,
-                size_t length,
                 const std::vector<typename std::iterator_traits<InputIt>::value_type>& prepend)
         {
             typedef typename std::iterator_traits<InputIt>::value_type value_t;
@@ -54,7 +67,7 @@ class AllChoices {
                     nextPrepend[lastIndex] = *it;
                     ++it;
 
-                    d_first = tuplesOfLengthPrepend(it, last, d_first, length - 1, nextPrepend);
+                    d_first = tuplesOfLengthPrepend(length - 1, it, last, d_first, nextPrepend);
                 }
 
                 return d_first;
