@@ -55,13 +55,13 @@ class IncidenceLattice {
         {
             rep_.restrictTo([&maximals, this](const Key_t& k) {
                     const auto& succs = this->rep_.maximalSuccessors(k);
-                    std::vector<Key_t> intersection;
+                    Keys_t intersection;
                     std::set_intersection(
                         maximals.begin(),
                         maximals.end(),
                         succs.begin(),
                         succs.end(),
-                        intersection.begin());
+                        std::inserter(intersection, intersection.begin()));
                     return intersection.empty();
                     });
         }
@@ -69,13 +69,13 @@ class IncidenceLattice {
         {
             rep_.restrictTo([&minimals, this](const Key_t& k) {
                     const auto& succs = this->rep_.minimalPredecessors(k);
-                    std::vector<Key_t> intersection;
+                    Keys_t intersection;
                     std::set_intersection(
                         minimals.begin(),
                         minimals.end(),
                         succs.begin(),
                         succs.end(),
-                        intersection.begin());
+                        std::inserter(intersection, intersection.begin()));
                     return intersection.empty();
                     });
         }
