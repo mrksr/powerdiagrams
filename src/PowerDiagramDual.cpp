@@ -21,7 +21,10 @@ static VectorXd normalToAffineSpace(const std::vector<VectorXd>& vectors)
 // to exist some point not in the facet. The dot product of the
 // normal and this point has to be smaller than zero if the normal
 // points outwards.
-static VectorXd outwardsNormal(const VectorXd& normal, const VectorXd& vertexOnFacet, const std::vector<VectorXd>& vertices)
+static VectorXd outwardsNormal(
+        const VectorXd& normal,
+        const VectorXd& vertexOnFacet,
+        const std::vector<VectorXd>& vertices)
 {
     // FIXME: This might cause numerical issues.
     const double epsilon = 1e-3;
