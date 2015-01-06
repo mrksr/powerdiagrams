@@ -29,7 +29,7 @@ static VectorXd outwardsNormal(const VectorXd& normal, const VectorXd& vertexOnF
         const auto dot = normal.dot(vertex - vertexOnFacet);
         if (dot > epsilon) {
             return (-1) * normal;
-        } else if (dot < epsilon) {
+        } else if (dot < -epsilon) {
             return normal;
         }
     }
