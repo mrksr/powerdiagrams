@@ -13,8 +13,9 @@
 #include <set>
 
 typedef int qhullID_t;
+typedef Eigen::VectorXd VectorXd;
 
-IncidenceLattice<Eigen::VectorXd> ConvexHullQhull::hullOf(const std::vector<Eigen::VectorXd>& points)
+IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& points)
 {
     const size_t dimension = points[0].size();
 
@@ -45,7 +46,7 @@ IncidenceLattice<Eigen::VectorXd> ConvexHullQhull::hullOf(const std::vector<Eige
 #endif
 
     // Create incidence lattice
-    IncidenceLattice<Eigen::VectorXd> lattice(Eigen::VectorXd::Zero(dimension));
+    IncidenceLattice<VectorXd> lattice(VectorXd::Zero(dimension));
     std::map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
 
     for (auto& facet : qhull.facetList().toStdVector()) {
