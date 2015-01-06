@@ -96,7 +96,7 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         normal = outwardsNormal(normal, facetPoints[0], polars);
 
         // Save normal in incidence lattice
-        dualIncidences.value(facet) = normal;
+        dualIncidences.value(facet, normal);
 
         if (normal[dimension - 1] < 0) {
             bottoms.insert(facet);
