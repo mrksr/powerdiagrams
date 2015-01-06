@@ -63,6 +63,14 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
     AllChoices::indexGroupsOfLength<size_t>(dim + 1, spheres.begin(), spheres.end(), std::back_inserter(groups));
 
     for (auto& group : groups) {
+#ifdef _VERBOSE_
+        std::cout << "Group:" << std::endl;
+        for (auto& item : group) {
+            std::cout << " " << item;
+        }
+        std::cout << std::endl;
+#endif
+
         bool hasSolution;
         VectorXd point;
         std::tie(hasSolution, point) = possible0Face(spheres, group);
@@ -72,7 +80,6 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
 
             if (validFace) {
                 std::cout << "0-Face at: " << point.transpose() << std::endl;
-
             }
         }
     }
