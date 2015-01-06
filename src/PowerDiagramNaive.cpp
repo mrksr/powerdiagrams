@@ -60,7 +60,7 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
 {
     const size_t dim = std::get<0>(spheres[0]).size();
     std::vector<std::vector<size_t>> groups;
-    AllChoices::indexGroupsOfLength<size_t>(dim, spheres.begin(), spheres.end(), std::back_inserter(groups));
+    AllChoices::indexGroupsOfLength<size_t>(dim + 1, spheres.begin(), spheres.end(), std::back_inserter(groups));
 
     for (auto& group : groups) {
         bool hasSolution;
