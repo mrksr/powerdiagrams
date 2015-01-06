@@ -8,8 +8,6 @@
 #include <tuple>
 #include <string>
 
-#define _VERBOSE_
-
 void printUsage()
 {
     std::cout << "Usage: ./powerdiagrams <centers> <radii>" << std::endl;
