@@ -95,12 +95,22 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         // Make sure the normal points outwards
         normal = outwardsNormal(normal, facetPoints[0], polars);
 
+#ifdef _VERBOSE_
+        std::cout << "Normal: " << normal.transpose();
+#endif
+
         // Save normal in incidence lattice
         dualIncidences.value(facet, normal);
 
         if (normal[dimension] < 0) {
             bottoms.insert(facet);
+#ifdef _VERBOSE_
+            std::cout << " Is bottom!";
+#endif
         }
+#ifdef _VERBOSE_
+        std::cout << std::endl;
+#endif
     }
     dualIncidences.restrictToMaximals(bottoms);
 
@@ -113,6 +123,8 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
 
         const auto polar = polarOfHyperplane(normal, offset);
         dualIncidences.value(facet, polar.head(dimension));
+
+        std::cout << "0-Face at: " << polar.head(dimension).transpose() << std::endl;
     }
 
     return dualIncidences;
