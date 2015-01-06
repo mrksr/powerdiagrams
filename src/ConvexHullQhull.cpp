@@ -40,7 +40,7 @@ IncidenceLattice<Eigen::VectorXd> ConvexHullQhull::hullOf(const std::vector<Eige
 
 #ifdef _VERBOSE_
     std::cout << qhull.qhullStatus() << std::endl;
-    std::cout << "Vertices (" << qhull.vertexCount() << "): " << std::endl << qhull.vertexList();
+    std::cout << "Vertices (" << qhull.vertexCount() << ") " << std::endl;
     std::cout << "Facets (" << qhull.facetCount() << "): " << std::endl << qhull.facetList();
 #endif
 
