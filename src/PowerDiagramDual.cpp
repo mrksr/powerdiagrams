@@ -7,11 +7,11 @@ typedef Eigen::VectorXd VectorXd;
 typedef Eigen::MatrixXd MatrixXd;
 
 // FIXME: This vector is a fairly useless temporary object
-static VectorXd normalToAll(const std::vector<VectorXd>& vectors)
+static VectorXd normalToAffineSpace(const std::vector<VectorXd>& vectors)
 {
-    MatrixXd A(vectors.size(), vectors[0].size());
-    for (size_t i = 0; i < vectors.size(); ++i) {
-        A.row(i) = vectors[i];
+    MatrixXd A(vectors.size() - 1, vectors[0].size());
+    for (size_t i = 1; i < vectors.size(); ++i) {
+        A.row(i - 1) = vectors[i] - vectors[0];
     }
 
     return A.fullPivLu().kernel().col(0).normalized();
@@ -90,7 +90,7 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         }
 
         // Find any normal
-        auto normal = normalToAll(facetPoints);
+        auto normal = normalToAffineSpace(facetPoints);
 
         // Make sure the normal points outwards
         normal = outwardsNormal(normal, facetPoints[0], polars);
