@@ -62,7 +62,7 @@ class IncidenceLattice {
                         succs.begin(),
                         succs.end(),
                         std::inserter(intersection, intersection.begin()));
-                    return intersection.empty();
+                    return !intersection.empty();
                     });
         }
         void restrictToMinimals(const Keys_t& minimals)
@@ -76,7 +76,7 @@ class IncidenceLattice {
                         succs.begin(),
                         succs.end(),
                         std::inserter(intersection, intersection.begin()));
-                    return intersection.empty();
+                    return !intersection.empty();
                     });
         }
 
