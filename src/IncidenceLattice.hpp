@@ -53,7 +53,7 @@ class IncidenceLattice {
         // FIXME: Potentially (too) expensive set intersection.
         void restrictToMaximals(const Keys_t& maximals)
         {
-            rep_.restrictTo([maximals, this](const Key_t& k) {
+            rep_.restrictTo([&maximals, this](const Key_t& k) {
                     const auto& succs = this->rep_.maximalSuccessors(k);
                     std::vector<Key_t> intersection;
                     std::set_intersection(
@@ -67,7 +67,7 @@ class IncidenceLattice {
         }
         void restrictToMinimals(const Keys_t& minimals)
         {
-            rep_.restrictTo([minimals, this](const Key_t& k) {
+            rep_.restrictTo([&minimals, this](const Key_t& k) {
                     const auto& succs = this->rep_.minimalPredecessors(k);
                     std::vector<Key_t> intersection;
                     std::set_intersection(
