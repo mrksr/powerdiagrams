@@ -40,9 +40,17 @@ multi:
 wine: dbg
 	$(DEBUG)/powerdiagram ./examples/pd_bsp_wine_sites.csv ./examples/pd_bsp_wine_gamma.csv
 
-.PHONY: simple
-simple: dbg
-	$(DEBUG)/powerdiagram ./examples/simple_sites.csv ./examples/simple_gamma.csv
+.PHONY: four
+four: dbg
+	$(DEBUG)/powerdiagram ./examples/four_sites.csv ./examples/four_gamma.csv
+
+.PHONY: voronoi
+voronoi: dbg
+	$(DEBUG)/powerdiagram ./examples/voronoi_sites.csv ./examples/voronoi_gamma.csv
+
+.PHONY: garage
+garage: dbg
+	$(DEBUG)/powerdiagram ./examples/garage_sites.csv ./examples/garage_gamma.csv
 
 .PHONY: run
 run: 2d
