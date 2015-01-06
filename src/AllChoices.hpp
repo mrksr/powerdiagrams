@@ -20,7 +20,12 @@ class AllChoices {
             std::iota(indices.begin(), indices.end(), 0);
             std::vector<index_t> prepend;
 
-            return groupsOfLengthPrepend(length, indices.begin(), indices.end(), d_first, prepend);
+            return groupsOfLengthPrepend(
+                    length,
+                    indices.begin(),
+                    indices.end(),
+                    d_first,
+                    prepend);
         }
 
         template<typename InputIt, typename OutputIt>
@@ -33,7 +38,12 @@ class AllChoices {
             typedef typename std::iterator_traits<InputIt>::value_type value_t;
             std::vector<value_t> prepend;
 
-            return groupsOfLengthPrepend(length, first, last, d_first, prepend);
+            return groupsOfLengthPrepend(
+                    length,
+                    first,
+                    last,
+                    d_first,
+                    prepend);
         }
 
     private:
@@ -69,7 +79,12 @@ class AllChoices {
                     prepend[lastIndex] = *it;
                     ++it;
 
-                    d_first = groupsOfLengthPrepend(length - 1, it, last, d_first, prepend);
+                    d_first = groupsOfLengthPrepend(
+                            length - 1,
+                            it,
+                            last,
+                            d_first,
+                            prepend);
                 }
 
                 prepend.erase(prepend.end() - 1);

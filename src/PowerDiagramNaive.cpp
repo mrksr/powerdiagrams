@@ -8,10 +8,16 @@ typedef Eigen::VectorXd VectorXd;
 typedef Eigen::MatrixXd MatrixXd;
 typedef std::tuple<VectorXd, double> Hyperplane_t;
 
-static std::pair<bool, VectorXd> possible0Face(const std::vector<Sphere_t>& spheres, const std::vector<size_t>& group)
+static std::pair<bool, VectorXd> possible0Face(
+        const std::vector<Sphere_t>& spheres,
+        const std::vector<size_t>& group)
 {
     std::vector<std::vector<size_t>> pairs;
-    AllChoices::indexGroupsOfLength<size_t>(2, group.begin(), group.end(), std::back_inserter(pairs));
+    AllChoices::indexGroupsOfLength<size_t>(
+            2,
+            group.begin(),
+            group.end(),
+            std::back_inserter(pairs));
 
     std::vector<Hyperplane_t> planes(pairs.size());
     std::transform(pairs.begin(), pairs.end(), planes.begin(),
@@ -41,7 +47,10 @@ static std::pair<bool, VectorXd> possible0Face(const std::vector<Sphere_t>& sphe
     return std::make_pair(hasSolution, result);
 }
 
-static bool is0Face(const std::vector<Sphere_t>& spheres, const std::vector<size_t>& group, const VectorXd& point)
+static bool is0Face(
+        const std::vector<Sphere_t>& spheres,
+        const std::vector<size_t>& group,
+        const VectorXd& point)
 {
     std::vector<double> powers(spheres.size());
     std::transform(spheres.begin(), spheres.end(), powers.begin(),
@@ -60,7 +69,11 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
 {
     const size_t dim = std::get<0>(spheres[0]).size();
     std::vector<std::vector<size_t>> groups;
-    AllChoices::indexGroupsOfLength<size_t>(dim + 1, spheres.begin(), spheres.end(), std::back_inserter(groups));
+    AllChoices::indexGroupsOfLength<size_t>(
+            dim + 1,
+            spheres.begin(),
+            spheres.end(),
+            std::back_inserter(groups));
 
     for (auto& group : groups) {
 #ifdef _VERBOSE_
