@@ -130,5 +130,10 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         std::cout << "0-Face at: " << polar.head(dimension).transpose() << std::endl;
     }
 
+    // Project Sphere centers back to the original space from the polar points.
+    for (auto& sphere : dualIncidences.minimals()) {
+        dualIncidences.value(sphere, dualIncidences.value(sphere).head(dimension));
+    }
+
     return dualIncidences;
 }
