@@ -50,7 +50,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     std::map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
 
     for (auto& facet : qhull.facetList().toStdVector()) {
-        std::set<decltype(lattice)::Key_t> vertices;
+        decltype(lattice)::Keys_t vertices;
 
         for (auto& vertex : facet.vertices()) {
             const auto id = vertex.point().id(qhull.runId());
