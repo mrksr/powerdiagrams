@@ -40,7 +40,14 @@ int main(int argc, char *argv[])
             ConvexHullQhull conv;
             PowerDiagramDual dual(conv);
             auto diagram = dual.fromSpheres(spheres);
+            std::cout << "Number of minimal nodes: " << diagram.minimals().size() << std::endl;
+            for (auto& minimal : diagram.minimals()) {
+                std::cout << "Minimal: " << diagram.value(minimal).transpose() << std::endl;
+            }
             std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
+            for (auto& maximal : diagram.maximals()) {
+                std::cout << "maximal: " << diagram.value(maximal).transpose() << std::endl;
+            }
         }
 
         std::cout << std::endl << std::endl;
@@ -48,7 +55,14 @@ int main(int argc, char *argv[])
         {
             PowerDiagramNaive naive;
             auto diagram = naive.fromSpheres(spheres);
+            std::cout << "Number of minimal nodes: " << diagram.minimals().size() << std::endl;
+            for (auto& minimal : diagram.minimals()) {
+                std::cout << "Minimal: " << diagram.value(minimal).transpose() << std::endl;
+            }
             std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
+            for (auto& maximal : diagram.maximals()) {
+                std::cout << "maximal: " << diagram.value(maximal).transpose() << std::endl;
+            }
         }
 
         return 0;
