@@ -75,6 +75,9 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
             spheres.end(),
             std::back_inserter(groups));
 
+    IncidenceLattice<VectorXd> lattice(VectorXd::Zero(0));
+    std::map<size_t, decltype(lattice)::Key_t> vertexMap;
+
     for (auto& group : groups) {
 #ifdef _VERBOSE_
         std::cout << "Group:" << std::endl;
@@ -93,9 +96,20 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
 
             if (validFace) {
                 std::cout << "0-Face at: " << point.transpose() << std::endl;
+
+                decltype(lattice)::Keys_t vertices;
+                for (auto& index : group) {
+                    if (vertexMap.count(index) <= 0) {
+                        vertexMap[index] = lattice.addMinimal(std::get<0>(spheres[index]));
+                    }
+
+                    vertices.insert(vertexMap[index]);
+                }
+
+                lattice.value(lattice.addFace(vertices), point);
             }
         }
     }
 
-    return IncidenceLattice<VectorXd>(VectorXd::Zero(0));
+    return lattice;
 }
