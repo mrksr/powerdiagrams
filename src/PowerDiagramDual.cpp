@@ -85,7 +85,7 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
 
     // Calculate normals of the hyperplanes (facets),
     // Restrict the incidence lattice to the facets on the bottom side
-    std::set<decltype(dualIncidences)::Key_t> bottoms;
+    decltype(dualIncidences)::Keys_t bottoms;
     for (auto& facet : dualIncidences.maximals()) {
         std::vector<VectorXd> facetPoints;
         for (auto& key : dualIncidences.minimalsOf(facet)) {
