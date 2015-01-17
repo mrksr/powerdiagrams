@@ -6,7 +6,6 @@
 typedef Eigen::VectorXd VectorXd;
 typedef Eigen::MatrixXd MatrixXd;
 
-// FIXME: This vector is a fairly useless temporary object
 static VectorXd normalToAffineSpace(const std::vector<VectorXd>& vectors)
 {
     MatrixXd A(vectors.size() - 1, vectors[0].size());
