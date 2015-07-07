@@ -19,7 +19,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 {
     const size_t dimension = points[0].size();
 
-    // FIXME: Copy might not be necessary if we use a map<>?
+    // FIXME: Copy might not be necessary if we use an Eigen::map<>?
     // Copy the points to qhull format
     coordT* qhullpoints = new coordT[dimension * points.size()];
 
