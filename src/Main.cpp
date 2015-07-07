@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
             }
             std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
             for (auto& maximal : diagram.maximals()) {
-                std::cout << "maximal: " << diagram.value(maximal).transpose() << std::endl;
+                std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl;
             }
         }
 
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
             }
             std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
             for (auto& maximal : diagram.maximals()) {
-                std::cout << "maximal: " << diagram.value(maximal).transpose() << std::endl;
+                std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl;
             }
         }
 
