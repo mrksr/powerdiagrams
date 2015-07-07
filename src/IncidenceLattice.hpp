@@ -12,7 +12,7 @@
 template <typename Value_t>
 class IncidenceLattice {
     public:
-        typedef int Key_t;
+        typedef size_t Key_t;
         typedef typename BidirectionalGraph<Key_t, Value_t>::Keys_t Keys_t;
 
         IncidenceLattice(const Value_t& defaultValue):
