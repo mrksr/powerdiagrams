@@ -48,11 +48,11 @@ class BidirectionalGraph {
             std::get<0>(rep_[key]) = value;
         }
 
-        const Keys_t& predecessors(const Key_t& key)
+        const Keys_t& predecessors(const Key_t& key) const
         {
             return immPreds(key);
         }
-        const Keys_t& successors(const Key_t& key)
+        const Keys_t& successors(const Key_t& key) const
         {
             return immSuccs(key);
         }
@@ -88,15 +88,15 @@ class BidirectionalGraph {
                     );
         }
 
-        bool isMinimal(const Key_t& key)
+        bool isMinimal(const Key_t& key) const
         {
             return predecessors(key).size() == 0;
         }
-        bool isMaximal(const Key_t& key)
+        bool isMaximal(const Key_t& key) const
         {
             return successors(key).size() == 0;
         }
-        Keys_t minimalElements()
+        Keys_t minimalElements() const
         {
             Keys_t res;
 
@@ -108,7 +108,7 @@ class BidirectionalGraph {
 
             return res;
         }
-        Keys_t maximalElements()
+        Keys_t maximalElements() const
         {
             Keys_t res;
 
@@ -174,9 +174,17 @@ class BidirectionalGraph {
     private:
         Graph_t rep_;
 
+        const Keys_t& immPreds(const Key_t& key) const
+        {
+            return std::get<1>(rep_.at(key));
+        }
         Keys_t& immPreds(const Key_t& key)
         {
             return std::get<1>(rep_[key]);
+        }
+        const Keys_t& immSuccs(const Key_t& key) const
+        {
+            return std::get<2>(rep_.at(key));
         }
         Keys_t& immSuccs(const Key_t& key)
         {
