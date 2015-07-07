@@ -1,6 +1,5 @@
 #include "PowerDiagramDual.hpp"
 #include <iostream>
-#include <map>
 #include <vector>
 
 typedef Eigen::VectorXd VectorXd;

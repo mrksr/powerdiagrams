@@ -3,7 +3,6 @@
 
 #include "BidirectionalGraph.hpp"
 #include <algorithm>
-#include <map>
 
 /**
  * @brief A datastructure containing incidences of faces in a d-dimensional polyhedron.
