@@ -2,9 +2,9 @@
 #define BIDIRECTIONALGRAPH_H
 
 #include <queue>
-#include <map>
 #include <set>
 #include <tuple>
+#include <unordered_map>
 
 /**
  * @brief A datastructure containing a directed graph with efficient lookup in both directions.
@@ -22,9 +22,10 @@
 template <typename Key_t, typename Value_t>
 class BidirectionalGraph {
     public:
+        // We use std::set here since we want to calculate intersections.
         typedef std::set<Key_t> Keys_t;
         typedef std::tuple<Value_t, Keys_t, Keys_t> Entry_t;
-        typedef std::map<Key_t, Entry_t> Graph_t;
+        typedef std::unordered_map<Key_t, Entry_t> Graph_t;
 
         BidirectionalGraph(): rep_() { }
         virtual ~BidirectionalGraph() { }

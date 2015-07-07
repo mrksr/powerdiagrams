@@ -2,6 +2,7 @@
 
 #include "AllChoices.hpp"
 #include <iostream>
+#include <unordered_map>
 
 typedef PowerDiagram::Sphere_t Sphere_t;
 typedef Eigen::VectorXd VectorXd;
@@ -76,7 +77,7 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
             std::back_inserter(groups));
 
     IncidenceLattice<VectorXd> lattice(VectorXd::Zero(0));
-    std::map<size_t, decltype(lattice)::Key_t> vertexMap;
+    std::unordered_map<size_t, decltype(lattice)::Key_t> vertexMap;
 
     for (auto& group : groups) {
 #ifdef _VERBOSE_
