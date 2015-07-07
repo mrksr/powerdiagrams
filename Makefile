@@ -32,9 +32,17 @@ multi:
 2dsmall: dbg
 	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_small_sites.csv ./examples/pd_bsp_2dCells_small_gamma.csv
 
+.PHONY: 3dsmall
+3dsmall: dbg
+	$(DEBUG)/powerdiagram ./examples/pd_bsp_3dCells_small_sites.csv ./examples/pd_bsp_3dCells_small_gamma.csv
+
 .PHONY: 2d
 2d: dbg
 	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_sites.csv ./examples/pd_bsp_2dCells_gamma.csv
+
+.PHONY: 3d
+3d: dbg
+	$(DEBUG)/powerdiagram ./examples/pd_bsp_3dCells_sites.csv ./examples/pd_bsp_3dCells_gamma.csv
 
 .PHONY: wine
 wine: dbg
