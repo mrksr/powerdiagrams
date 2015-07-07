@@ -1,5 +1,5 @@
 #include "ConvexHullQhull.hpp"
-#include <iostream>
+
 #include <libqhullcpp/Qhull.h>
 #include <libqhullcpp/QhullError.h>
 #include <libqhullcpp/QhullFacet.h>
@@ -9,8 +9,12 @@
 #include <libqhullcpp/QhullVertex.h>
 #include <libqhullcpp/QhullVertexSet.h>
 #include <libqhullcpp/RboxPoints.h>
-#include <map>
-#include <set>
+#include <unordered_map>
+#include <vector>
+
+#ifdef _VERBOSE_
+  #include <iostream>
+#endif
 
 typedef int qhullID_t;
 typedef Eigen::VectorXd VectorXd;
@@ -21,7 +25,8 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 
     // FIXME: Copy might not be necessary if we use an Eigen::map<>?
     // Copy the points to qhull format
-    coordT* qhullpoints = new coordT[dimension * points.size()];
+    std::vector<coordT> qhullpoints;
+    qhullpoints.reserve(dimension * points.size());
 
     for (size_t i = 0; i < points.size(); ++i) {
         for (size_t j = 0; j < dimension; ++j) {
@@ -37,7 +42,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 #endif
 
     // Find convex hull
-    qhull.runQhull("", dimension, points.size(), qhullpoints, "s");
+    qhull.runQhull("", dimension, points.size(), &qhullpoints[0], "s");
 
 #ifdef _VERBOSE_
     std::cout << qhull.qhullStatus() << std::endl;
@@ -47,7 +52,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 
     // Create incidence lattice
     IncidenceLattice<VectorXd> lattice(VectorXd::Zero(dimension));
-    std::map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
+    std::unordered_map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
 
     for (auto& facet : qhull.facetList().toStdVector()) {
         decltype(lattice)::Keys_t vertices;
@@ -64,6 +69,5 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
         lattice.addFace(vertices);
     }
 
-    delete[] qhullpoints;
     return lattice;
 }
