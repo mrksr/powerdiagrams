@@ -80,14 +80,6 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
     std::unordered_map<size_t, decltype(lattice)::Key_t> vertexMap;
 
     for (auto& group : groups) {
-#ifdef _VERBOSE_
-        std::cout << "Group:" << std::endl;
-        for (auto& item : group) {
-            std::cout << " " << item;
-        }
-        std::cout << std::endl;
-#endif
-
         bool hasSolution;
         VectorXd point;
         std::tie(hasSolution, point) = possible0Face(spheres, group);
