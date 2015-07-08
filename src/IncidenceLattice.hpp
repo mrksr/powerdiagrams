@@ -32,6 +32,14 @@ class IncidenceLattice {
             rep_.value(key, value);
         }
 
+        const Keys_t& predecessors(const Key_t& key) const
+        {
+            return rep_.predecessors(key);
+        }
+        const Keys_t& successors(const Key_t& key) const
+        {
+            return rep_.predecessors(key);
+        }
         Keys_t minimals() const
         {
             return rep_.minimalElements();
