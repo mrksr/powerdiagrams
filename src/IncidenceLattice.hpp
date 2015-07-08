@@ -89,24 +89,30 @@ class IncidenceLattice {
         }
         Key_t addFace(const Keys_t& faces)
         {
-            auto key = nextKey();
-            rep_.insertNode(key, defaultValue_);
-
-            Key_t lub;
             auto groups = bestGroups(faces);
-            if (leastUpperBound(faces, lub)) {
-                for (auto& group : groups) {
-                    rep_.deleteEdge(group, lub);
+
+            if (groups.size() == 1) {
+                // This face already exists, return it
+                return *groups.begin();
+            } else {
+                Key_t lub;
+
+                auto key = nextKey();
+                rep_.insertNode(key, defaultValue_);
+                if (leastUpperBound(faces, lub)) {
+                    for (auto& group : groups) {
+                        rep_.deleteEdge(group, lub);
+                    }
+
+                    rep_.insertEdge(key, lub);
                 }
 
-                rep_.insertEdge(key, lub);
-            }
+                for (auto& group : groups) {
+                    rep_.insertEdge(group, key);
+                }
 
-            for (auto& group : groups) {
-                rep_.insertEdge(group, key);
+                return key;
             }
-
-            return key;
         }
 
     private:
