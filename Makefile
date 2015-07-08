@@ -21,7 +21,7 @@ rel: | $(RELEASE)
 
 .PHONY: debug
 dbg: | $(DEBUG)
-	cd $(DEBUG); cmake -DCMAKE_BUILD_TYPE=Debug ..; $(MAKE)
+	cd $(DEBUG); cmake -DCMAKE_BUILD_TYPE=Debug -DVERBOSE=ON ..; $(MAKE)
 
 .PHONY: multi
 multi:
@@ -51,6 +51,10 @@ wine: dbg
 .PHONY: four
 four: dbg
 	$(DEBUG)/powerdiagram ./examples/four_sites.csv ./examples/four_gamma.csv
+
+.PHONY: grid
+grid: dbg
+	$(DEBUG)/powerdiagram ./examples/grid_sites.csv ./examples/grid_gamma.csv
 
 .PHONY: voronoi
 voronoi: dbg
