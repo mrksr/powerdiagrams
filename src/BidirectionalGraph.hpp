@@ -59,33 +59,35 @@ class BidirectionalGraph {
         }
         Keys_t allPredecessors(const Key_t& key) const
         {
-            return reachable(
+            return reachableNodes(
                     key,
-                    [this](const Key_t& k) { return this->immPreds(k); }
+                    [this](const Key_t& k) { return immPreds(k); }
                     );
         }
         Keys_t allSuccessors(const Key_t& key) const
         {
-            return reachable(
+            return reachableNodes(
                     key,
-                    [this](const Key_t& k) { return this->immSuccs(k); }
+                    [this](const Key_t& k) { return immSuccs(k); }
                     );
         }
 
         Keys_t minimalPredecessors(const Key_t& key) const
         {
-            return reachableFilter(
+            return findNodes(
                     key,
-                    [this](const Key_t& k) { return this->isMinimal(k); },
-                    [this](const Key_t& k) { return this->immPreds(k); }
+                    [this](const Key_t& k) { return isMinimal(k); },
+                    [] (const Key_t&k) { return true; },
+                    [this](const Key_t& k) { return immPreds(k); }
                     );
         }
         Keys_t maximalSuccessors(const Key_t& key) const
         {
-            return reachableFilter(
+            return findNodes(
                     key,
-                    [this](const Key_t& k) { return this->isMaximal(k); },
-                    [this](const Key_t& k) { return this->immSuccs(k); }
+                    [this](const Key_t& k) { return isMaximal(k); },
+                    [] (const Key_t&k) { return true; },
+                    [this](const Key_t& k) { return immSuccs(k); }
                     );
         }
 
@@ -172,6 +174,47 @@ class BidirectionalGraph {
             }
         }
 
+        template <typename Next>
+        Keys_t reachableNodes(const Key_t& from, Next&& next) const
+        {
+            return findNodes(
+                from,
+                [](const Key_t&) { return true; },
+                [](const Key_t&) { return true; },
+                std::forward<Next>(next)
+                );
+        }
+
+        template <typename Filter, typename Continue, typename Next>
+        Keys_t findNodes(const Key_t& from, Filter&& filter, Continue&& cont, Next&& next) const
+        {
+            Keys_t visited;
+            std::queue<Key_t> tovisit;
+            tovisit.push(from);
+
+            Keys_t result;
+            while (!tovisit.empty()) {
+                auto& element = tovisit.front();
+                tovisit.pop();
+
+                if (filter(element)) {
+                    result.insert(element);
+                }
+
+                visited.insert(element);
+                if (cont(element)) {
+                    for (auto& item : next(element)) {
+                        if (visited.count(item) == 0) {
+                            tovisit.push(item);
+                            visited.insert(item);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
     private:
         Graph_t rep_;
 
@@ -190,47 +233,6 @@ class BidirectionalGraph {
         Keys_t& immSuccs(const Key_t& key)
         {
             return std::get<2>(rep_[key]);
-        }
-
-        template <typename Next>
-        Keys_t reachable(const Key_t& key, Next&& next)
-        {
-            return reachableFilter(key,
-                    [](const Key_t&) { return true; },
-                    std::forward<Next>(next)
-                    );
-        }
-
-        template <typename Filter, typename Next>
-        Keys_t reachableFilter(const Key_t& key, Filter&& filter, Next&& next)
-        {
-            Keys_t visited { key };
-            std::queue<Key_t> tovisit;
-            tovisit.push(key);
-
-            Keys_t result;
-            if (filter(key)) {
-                result.insert(key);
-            }
-
-            while (! tovisit.empty()) {
-                auto& element = tovisit.front();
-                tovisit.pop();
-
-                visited.insert(element);
-                for (auto& item : next(element)) {
-                    if (visited.count(item) == 0) {
-                        tovisit.push(item);
-                        visited.insert(item);
-
-                        if (filter(item)) {
-                            result.insert(item);
-                        }
-                    }
-                }
-            }
-
-            return result;
         }
 };
 
