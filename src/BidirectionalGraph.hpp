@@ -57,14 +57,14 @@ class BidirectionalGraph {
         {
             return immSuccs(key);
         }
-        Keys_t allPredecessors(const Key_t& key)
+        Keys_t allPredecessors(const Key_t& key) const
         {
             return reachable(
                     key,
                     [this](const Key_t& k) { return this->immPreds(k); }
                     );
         }
-        Keys_t allSuccessors(const Key_t& key)
+        Keys_t allSuccessors(const Key_t& key) const
         {
             return reachable(
                     key,
@@ -72,7 +72,7 @@ class BidirectionalGraph {
                     );
         }
 
-        Keys_t minimalPredecessors(const Key_t& key)
+        Keys_t minimalPredecessors(const Key_t& key) const
         {
             return reachableFilter(
                     key,
@@ -80,7 +80,7 @@ class BidirectionalGraph {
                     [this](const Key_t& k) { return this->immPreds(k); }
                     );
         }
-        Keys_t maximalSuccessors(const Key_t& key)
+        Keys_t maximalSuccessors(const Key_t& key) const
         {
             return reachableFilter(
                     key,
