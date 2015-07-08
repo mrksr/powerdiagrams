@@ -42,10 +42,10 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 #endif
 
     // Find convex hull
-    qhull.runQhull("", dimension, points.size(), &qhullpoints[0], "s");
+    qhull.runQhull("", dimension, points.size(), &qhullpoints[0], "f i s");
 
 #ifdef _VERBOSE_
-    std::cout << qhull.qhullStatus() << std::endl;
+    std::cout << "Final Status: " << qhull.qhullStatus() << std::endl;
     std::cout << "Vertices (" << qhull.vertexCount() << ") " << std::endl;
     std::cout << "Facets (" << qhull.facetCount() << "): " << std::endl << qhull.facetList();
 #endif
