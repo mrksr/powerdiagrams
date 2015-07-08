@@ -77,7 +77,7 @@ class BidirectionalGraph {
             return findNodes(
                     key,
                     [this](const Key_t& k) { return isMinimal(k); },
-                    [] (const Key_t&k) { return true; },
+                    [] (const Key_t&) { return true; },
                     [this](const Key_t& k) { return immPreds(k); }
                     );
         }
@@ -86,7 +86,7 @@ class BidirectionalGraph {
             return findNodes(
                     key,
                     [this](const Key_t& k) { return isMaximal(k); },
-                    [] (const Key_t&k) { return true; },
+                    [] (const Key_t&) { return true; },
                     [this](const Key_t& k) { return immSuccs(k); }
                     );
         }
