@@ -22,7 +22,7 @@ class IncidenceLattice {
         { }
         virtual ~IncidenceLattice() { }
 
-        Value_t value(const Key_t& key)
+        Value_t& value(const Key_t& key)
         {
             return rep_.value(key);
         }
@@ -31,20 +31,20 @@ class IncidenceLattice {
             rep_.value(key, value);
         }
 
-        Keys_t minimals()
+        Keys_t minimals() const
         {
             return rep_.minimalElements();
         }
-        Keys_t maximals()
+        Keys_t maximals() const
         {
             return rep_.maximalElements();
         }
 
-        Keys_t minimalsOf(const Key_t& key)
+        Keys_t minimalsOf(const Key_t& key) const
         {
             return rep_.minimalPredecessors(key);
         }
-        Keys_t maximalsOf(const Key_t& key)
+        Keys_t maximalsOf(const Key_t& key) const
         {
             return rep_.maximalSuccessors(key);
         }
@@ -53,7 +53,7 @@ class IncidenceLattice {
         void restrictToMaximals(const Keys_t& maximals)
         {
             rep_.restrictTo([&maximals, this](const Key_t& k) {
-                    const auto& succs = this->rep_.maximalSuccessors(k);
+                    const auto& succs = rep_.maximalSuccessors(k);
                     Keys_t intersection;
                     std::set_intersection(
                         maximals.begin(),
@@ -67,7 +67,7 @@ class IncidenceLattice {
         void restrictToMinimals(const Keys_t& minimals)
         {
             rep_.restrictTo([&minimals, this](const Key_t& k) {
-                    const auto& succs = this->rep_.minimalPredecessors(k);
+                    const auto& succs = rep_.minimalPredecessors(k);
                     Keys_t intersection;
                     std::set_intersection(
                         minimals.begin(),
