@@ -3,6 +3,7 @@
 
 #include "BidirectionalGraph.hpp"
 #include <algorithm>
+#include <queue>
 
 /**
  * @brief A datastructure containing incidences of faces in a d-dimensional polyhedron.
@@ -86,13 +87,23 @@ class IncidenceLattice {
 
             return key;
         }
-        Key_t addFace(const Keys_t& face)
+        Key_t addFace(const Keys_t& faces)
         {
             auto key = nextKey();
             rep_.insertNode(key, defaultValue_);
 
-            for (auto& item : face) {
-                rep_.insertEdge(item, key);
+            Key_t lub;
+            auto groups = bestGroups(faces);
+            if (leastUpperBound(faces, lub)) {
+                for (auto& group : groups) {
+                    rep_.deleteEdge(group, lub);
+                }
+
+                rep_.insertEdge(key, lub);
+            }
+
+            for (auto& group : groups) {
+                rep_.insertEdge(group, key);
             }
 
             return key;
@@ -105,6 +116,80 @@ class IncidenceLattice {
 
         Key_t nextKey() {
             return nextKey_++;
+        }
+
+        bool leastUpperBound(const Keys_t& faces, Key_t& out)
+        {
+            if (faces.empty()) {
+                return false;
+            }
+
+            // A Node is an Upperbound if it is a successor of all nodes in
+            // faces.
+            const auto isUb = [&faces, this](const Key_t& k) {
+                const auto preds = rep_.allPredecessors(k);
+                return std::all_of(
+                    faces.begin(),
+                    faces.end(),
+                    [&preds](const Key_t& face) {
+                        return preds.count(face) > 0;
+                    });
+            };
+
+            const auto lubs = rep_.findNodes(
+                *faces.begin(),
+                [&isUb](const Key_t& k) { return isUb(k); },
+                [&isUb](const Key_t& k) { return !isUb(k); },
+                [this](const Key_t& k) { return rep_.successors(k);
+                });
+
+            if (lubs.empty()) {
+                return false;
+            } else {
+                out = *lubs.begin();
+                return true;
+            }
+        }
+
+        Keys_t bestGroups(const Keys_t& faces)
+        {
+            // A Node is a group if it only contains minimals who are also
+            // minimals of some of the faces.
+            Keys_t minimals;
+            for (auto& face : faces) {
+                const auto mins = minimalsOf(face);
+                minimals.insert(mins.begin(), mins.end());
+            }
+
+            const auto isGroup = [&minimals, this](const Key_t& k) {
+                const auto kmins = minimalsOf(k);
+                return std::all_of(
+                    kmins.begin(),
+                    kmins.end(),
+                    [&minimals](const Key_t& min) {
+                        return minimals.count(min) > 0;
+                    });
+            };
+
+            Keys_t groups;
+            for (auto& face : faces) {
+                const auto candidates = rep_.findNodes(
+                    face,
+                    [&isGroup](const Key_t& k) { return isGroup(k); },
+                    [&isGroup](const Key_t& k) { return isGroup(k); },
+                    [this](const Key_t& k) { return rep_.successors(k);
+                    });
+
+                // Since face itself is a group, this is well-defined.
+                groups.insert(*std::max_element(
+                        candidates.begin(),
+                        candidates.end(),
+                        [this](const Key_t& a, const Key_t& b) {
+                            return minimalsOf(a).size() < minimalsOf(b).size();
+                        }));
+            }
+
+            return groups;
         }
 };
 

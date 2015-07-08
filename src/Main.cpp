@@ -2,6 +2,7 @@
 #include "FromCSV.hpp"
 #include "PowerDiagramDual.hpp"
 #include "PowerDiagramNaive.hpp"
+#include "IncidenceLattice.hpp"
 #include <Eigen/Dense>
 #include <iostream>
 #include <vector>
@@ -48,22 +49,31 @@ int main(int argc, char *argv[])
             for (auto& maximal : diagram.maximals()) {
                 std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl;
             }
+
+            /* decltype(diagram)::Key_t lub, a, b; */
+            /* std::tie(a, b) = std::make_pair(*diagram.minimals().begin(), *(++diagram.minimals().begin())); */
+            /* auto res = diagram.leastUpperBound( */
+            /*   {a, b}, */
+            /*   lub); */
+
+            /* std::cout << "Lub of " << a << ": " << diagram.value(a).transpose() << " and " << b << ": " << diagram.value(b).transpose() << std::endl; */
+            /* std::cout << "Result: " << res << " - " << lub << ": " << diagram.value(lub).transpose() << std::endl; */
         }
 
-        std::cout << std::endl << std::endl;
-        std::cout << "Naive algorithm:" << std::endl;
-        {
-            PowerDiagramNaive naive;
-            auto diagram = naive.fromSpheres(spheres);
-            std::cout << "Number of minimal nodes: " << diagram.minimals().size() << std::endl;
-            for (auto& minimal : diagram.minimals()) {
-                std::cout << "Minimal: " << diagram.value(minimal).transpose() << std::endl;
-            }
-            std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
-            for (auto& maximal : diagram.maximals()) {
-                std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl;
-            }
-        }
+        /* std::cout << std::endl << std::endl; */
+        /* std::cout << "Naive algorithm:" << std::endl; */
+        /* { */
+        /*     PowerDiagramNaive naive; */
+        /*     auto diagram = naive.fromSpheres(spheres); */
+        /*     std::cout << "Number of minimal nodes: " << diagram.minimals().size() << std::endl; */
+        /*     for (auto& minimal : diagram.minimals()) { */
+        /*         std::cout << "Minimal: " << diagram.value(minimal).transpose() << std::endl; */
+        /*     } */
+        /*     std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl; */
+        /*     for (auto& maximal : diagram.maximals()) { */
+        /*         std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl; */
+        /*     } */
+        /* } */
 
         return 0;
     }
