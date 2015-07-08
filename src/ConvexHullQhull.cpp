@@ -8,6 +8,7 @@
 #include <libqhullcpp/QhullQh.h>
 #include <libqhullcpp/QhullVertex.h>
 #include <libqhullcpp/QhullVertexSet.h>
+#include <libqhullcpp/QhullRidge.h>
 #include <libqhullcpp/RboxPoints.h>
 #include <unordered_map>
 #include <vector>
@@ -57,6 +58,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     for (auto& facet : qhull.facetList().toStdVector()) {
         decltype(lattice)::Keys_t vertices;
 
+        // Add the facet
         for (auto& vertex : facet.vertices()) {
             const auto id = vertex.point().id(qhull.runId());
             if (vertexMap.count(id) <= 0) {
@@ -67,6 +69,22 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
         }
 
         lattice.addFace(vertices);
+
+        // Add the ridges
+        for (auto& ridge : facet.ridges().toStdVector()) {
+            vertices.clear();
+
+            for (auto& vertex : ridge.vertices()) {
+                const auto id = vertex.point().id(qhull.runId());
+                if (vertexMap.count(id) <= 0) {
+                    vertexMap[id] = lattice.addMinimal(points[id]);
+                }
+
+                vertices.insert(vertexMap[id]);
+            }
+
+            lattice.addFace(vertices);
+        }
     }
 
     return lattice;
