@@ -10,6 +10,7 @@
 #include <libqhullcpp/QhullVertexSet.h>
 #include <libqhullcpp/QhullRidge.h>
 #include <libqhullcpp/RboxPoints.h>
+#include <libqhull/merge.h>
 #include <unordered_map>
 #include <vector>
 
@@ -71,6 +72,8 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
         lattice.addFace(vertices);
 
         // Add the ridges
+        // See FAQ
+        qh_makeridges(facet.getFacetT());
         for (auto& ridge : facet.ridges().toStdVector()) {
             vertices.clear();
 
