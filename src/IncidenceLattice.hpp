@@ -152,10 +152,10 @@ class IncidenceLattice {
 
             const auto lubs = rep_.findNodes(
                 *faces.begin(),
-                [&isUb](const Key_t& k) { return isUb(k); },
+                isUb,
                 [&isUb](const Key_t& k) { return !isUb(k); },
-                [this](const Key_t& k) { return rep_.successors(k);
-                });
+                [this](const Key_t& k) { return rep_.successors(k); }
+                );
 
             if (lubs.empty()) {
                 return false;
@@ -189,10 +189,10 @@ class IncidenceLattice {
             for (auto& face : faces) {
                 const auto candidates = rep_.findNodes(
                     face,
-                    [&isGroup](const Key_t& k) { return isGroup(k); },
-                    [&isGroup](const Key_t& k) { return isGroup(k); },
-                    [this](const Key_t& k) { return rep_.successors(k);
-                    });
+                    isGroup,
+                    isGroup,
+                    [this](const Key_t& k) { return rep_.successors(k); }
+                    );
 
                 // Since face itself is a group, this is well-defined.
                 groups.insert(*std::max_element(
