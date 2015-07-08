@@ -140,13 +140,18 @@ class IncidenceLattice {
 
             // A Node is an Upperbound if it is a successor of all nodes in
             // faces.
-            const auto isUb = [&faces, this](const Key_t& k) {
-                const auto preds = rep_.allPredecessors(k);
+            Keys_t minimals;
+            for (auto& face : faces) {
+                const auto mins = minimalsOf(face);
+                minimals.insert(mins.begin(), mins.end());
+            }
+            const auto isUb = [&minimals, this](const Key_t& k) {
+                const auto kmins = minimalsOf(k);
                 return std::all_of(
-                    faces.begin(),
-                    faces.end(),
-                    [&preds](const Key_t& face) {
-                        return preds.count(face) > 0;
+                    minimals.begin(),
+                    minimals.end(),
+                    [&kmins](const Key_t& face) {
+                        return kmins.count(face) > 0;
                     });
             };
 
