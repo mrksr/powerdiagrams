@@ -196,7 +196,7 @@ class BidirectionalGraph {
         Keys_t reachable(const Key_t& key, Next&& next)
         {
             return reachableFilter(key,
-                    [](const Key_t& x) { return true; },
+                    [](const Key_t&) { return true; },
                     std::forward<Next>(next)
                     );
         }
