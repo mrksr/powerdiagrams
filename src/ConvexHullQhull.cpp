@@ -55,9 +55,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 #endif
     decltype(lattice)::Keys_t vertices;
     // Bookkeeping to ensure we visit every ridge only once.
-    // Note that we use the C-API here with the "qh" macro, since this
-    // functionality is not exposed through the C++ API.
-    qh visit_id++;
+    qhull.qhullQh()->visit_id++;
     for (auto& facet : qhull.facetList().toStdVector()) {
         vertices.clear();
 
@@ -77,14 +75,14 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
         // See FAQ of qhull about makeridges.
         // http://www.qhull.org/html/qh-faq.htm#ridges
         qh_makeridges(facet.getFacetT());
-        facet.getFacetT()->visitid = qh visit_id;
+        facet.getFacetT()->visitid = qhull.qhullQh()->visit_id;
 
         for (auto& ridge : facet.ridges().toStdVector()) {
             const auto neighbourVisited = otherfacet_(
                 ridge.getRidgeT(),
                 facet.getFacetT()
                 )->visitid;
-            if (neighbourVisited != qh visit_id) { 
+            if (neighbourVisited != qhull.qhullQh()->visit_id) { 
                 vertices.clear();
 
                 for (auto& vertex : ridge.vertices()) {
