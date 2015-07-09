@@ -18,10 +18,14 @@ int main(int argc, char *argv[])
 {
     if (argc < 3) {
         printUsage();
-
         return 1;
     } else {
         const auto& spheres = FromCSV::spheres(argv[1], argv[2]);
+
+        if (spheres.size() < 1) {
+            std::cout << "Error: Empty input. Maybe the Filenames are wrong?"<< std::endl;
+            return 1;
+        }
 
 #ifdef _VERBOSE_
         std::cout << "Spheres:" << std::endl;
