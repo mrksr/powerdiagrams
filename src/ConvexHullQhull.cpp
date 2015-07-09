@@ -1,16 +1,10 @@
 #include "ConvexHullQhull.hpp"
 
 #include <libqhullcpp/Qhull.h>
-#include <libqhullcpp/QhullError.h>
 #include <libqhullcpp/QhullFacet.h>
 #include <libqhullcpp/QhullFacetList.h>
-#include <libqhullcpp/QhullLinkedList.h>
-#include <libqhullcpp/QhullQh.h>
 #include <libqhullcpp/QhullVertex.h>
-#include <libqhullcpp/QhullVertexSet.h>
 #include <libqhullcpp/QhullRidge.h>
-#include <libqhullcpp/RboxPoints.h>
-#include <libqhull/merge.h>
 #include <unordered_map>
 #include <vector>
 
