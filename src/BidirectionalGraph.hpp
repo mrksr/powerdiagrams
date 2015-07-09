@@ -191,6 +191,7 @@ class BidirectionalGraph {
             Keys_t visited;
             std::queue<Key_t> tovisit;
             tovisit.push(from);
+            visited.insert(from);
 
             Keys_t result;
             while (!tovisit.empty()) {
@@ -201,7 +202,6 @@ class BidirectionalGraph {
                     result.insert(element);
                 }
 
-                visited.insert(element);
                 if (cont(element)) {
                     for (auto& item : next(element)) {
                         if (visited.count(item) == 0) {
