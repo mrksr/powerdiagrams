@@ -60,6 +60,9 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     int i = 0;
 #endif
     decltype(lattice)::Keys_t vertices;
+    // Bookkeeping to ensure we visit every ridge only once.
+    qh visit_id++;
+
     for (auto& facet : qhull.facetList().toStdVector()) {
         vertices.clear();
 
@@ -78,22 +81,30 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
         // Add the ridges
         // See FAQ
         qh_makeridges(facet.getFacetT());
-        for (auto& ridge : facet.ridges().toStdVector()) {
-            vertices.clear();
+        facet.getFacetT()->visitid = qh visit_id;
 
-            for (auto& vertex : ridge.vertices()) {
-                const auto id = vertex.point().id(qhull.runId());
-                if (vertexMap.count(id) <= 0) {
-                    vertexMap[id] = lattice.addMinimal(points[id]);
+        for (auto& ridge : facet.ridges().toStdVector()) {
+            const auto neighborVisited = otherfacet_(
+                ridge.getRidgeT(),
+                facet.getFacetT()
+                )->visitid;
+            if (neighborVisited != qh visit_id) { 
+                vertices.clear();
+
+                for (auto& vertex : ridge.vertices()) {
+                    const auto id = vertex.point().id(qhull.runId());
+                    if (vertexMap.count(id) <= 0) {
+                        vertexMap[id] = lattice.addMinimal(points[id]);
+                    }
+
+                    vertices.insert(vertexMap[id]);
                 }
 
-                vertices.insert(vertexMap[id]);
-            }
-
-            lattice.addFace(vertices);
+                lattice.addFace(vertices);
 #ifdef _VERBOSE_
-            std::cout << "Ridge " << ++i << std::endl;
+                std::cout << "Ridge " << ++i << std::endl;
 #endif
+            }
         }
     }
 
