@@ -195,7 +195,7 @@ class BidirectionalGraph {
 
             Keys_t result;
             while (!tovisit.empty()) {
-                auto& element = tovisit.front();
+                auto element = tovisit.front();
                 tovisit.pop();
 
                 if (filter(element)) {
