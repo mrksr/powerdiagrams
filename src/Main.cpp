@@ -1,13 +1,16 @@
-#include "ConvexHullQhull.hpp"
 #include "FromCSV.hpp"
+#include "IncidenceLattice.hpp"
 #include "PowerDiagramDual.hpp"
 #include "PowerDiagramNaive.hpp"
-#include "IncidenceLattice.hpp"
 #include <Eigen/Dense>
 #include <iostream>
-#include <vector>
-#include <tuple>
 #include <string>
+#include <tuple>
+#include <vector>
+
+#ifdef HAVE_QHULL
+#include "ConvexHullQhull.hpp"
+#endif
 
 void printUsage()
 {
@@ -40,6 +43,7 @@ int main(int argc, char *argv[])
         std::cout << std::endl << std::endl;
 #endif
 
+#ifdef HAVE_QHULL
         std::cout << "Dual algorithm:" << std::endl;
         {
             ConvexHullQhull conv;
@@ -61,8 +65,9 @@ int main(int argc, char *argv[])
                 }
             }
         }
-
         std::cout << std::endl << std::endl;
+#endif
+
         std::cout << "Naive algorithm:" << std::endl;
         {
             PowerDiagramNaive naive;
