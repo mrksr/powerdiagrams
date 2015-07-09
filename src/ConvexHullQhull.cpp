@@ -12,8 +12,8 @@
   #include <iostream>
 #endif
 
-typedef int qhullID_t;
-typedef Eigen::VectorXd VectorXd;
+using qhullID_t = int;
+using Eigen::VectorXd;
 
 IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& points)
 {

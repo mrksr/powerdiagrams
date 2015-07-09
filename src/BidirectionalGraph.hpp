@@ -23,9 +23,9 @@ template <typename Key_t, typename Value_t>
 class BidirectionalGraph {
     public:
         // We use std::set here since we want to calculate intersections.
-        typedef std::set<Key_t> Keys_t;
-        typedef std::tuple<Value_t, Keys_t, Keys_t> Entry_t;
-        typedef std::unordered_map<Key_t, Entry_t> Graph_t;
+        using Keys_t = std::set<Key_t>;
+        using Entry_t = std::tuple<Value_t, Keys_t, Keys_t>;
+        using Graph_t = std::unordered_map<Key_t, Entry_t>;
 
         BidirectionalGraph(): rep_() { }
         virtual ~BidirectionalGraph() { }

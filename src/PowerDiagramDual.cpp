@@ -2,8 +2,8 @@
 #include <iostream>
 #include <vector>
 
-typedef Eigen::VectorXd VectorXd;
-typedef Eigen::MatrixXd MatrixXd;
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
 
 static VectorXd normalToAffineSpace(const std::vector<VectorXd>& vectors)
 {

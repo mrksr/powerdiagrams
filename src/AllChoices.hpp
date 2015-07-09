@@ -35,7 +35,7 @@ class AllChoices {
                 InputIt last,
                 OutputIt d_first)
         {
-            typedef typename std::iterator_traits<InputIt>::value_type value_t;
+            using value_t = typename std::iterator_traits<InputIt>::value_type;
             std::vector<value_t> prepend;
 
             return groupsOfLengthPrepend(

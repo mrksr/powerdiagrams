@@ -5,8 +5,8 @@
 #include <sstream>
 #include <vector>
 
-typedef Eigen::VectorXd VectorXd;
-typedef Eigen::MatrixXd MatrixXd;
+using Eigen::VectorXd;
+using Eigen::MatrixXd;
 
 VectorXd nextCenter(std::istream& centerStream)
 {

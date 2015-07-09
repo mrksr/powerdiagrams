@@ -4,10 +4,10 @@
 #include <iostream>
 #include <unordered_map>
 
-typedef PowerDiagram::Sphere_t Sphere_t;
-typedef Eigen::VectorXd VectorXd;
-typedef Eigen::MatrixXd MatrixXd;
-typedef std::tuple<VectorXd, double> Hyperplane_t;
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
+using Hyperplane_t = std::tuple<VectorXd, double>;
+using Sphere_t = PowerDiagram::Sphere_t;
 
 static std::pair<bool, VectorXd> possible0Face(
         const std::vector<Sphere_t>& spheres,

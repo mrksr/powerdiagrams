@@ -9,7 +9,7 @@
 
 class PowerDiagram {
     public:
-        typedef std::tuple<Eigen::VectorXd, double> Sphere_t;
+        using Sphere_t = std::tuple<Eigen::VectorXd, double>;
 
         virtual ~PowerDiagram() { }
 
