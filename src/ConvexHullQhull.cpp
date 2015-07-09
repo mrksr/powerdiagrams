@@ -56,8 +56,12 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     IncidenceLattice<VectorXd> lattice(VectorXd::Zero(dimension));
     std::unordered_map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
 
+#ifdef _VERBOSE_
+    int i = 0;
+#endif
+    decltype(lattice)::Keys_t vertices;
     for (auto& facet : qhull.facetList().toStdVector()) {
-        decltype(lattice)::Keys_t vertices;
+        vertices.clear();
 
         // Add the facet
         for (auto& vertex : facet.vertices()) {
@@ -87,6 +91,9 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
             }
 
             lattice.addFace(vertices);
+#ifdef _VERBOSE_
+            std::cout << "Ridge " << ++i << std::endl;
+#endif
         }
     }
 
