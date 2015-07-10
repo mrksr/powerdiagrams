@@ -155,7 +155,7 @@ class IncidenceLattice {
                     minimals.begin(),
                     minimals.end(),
                     [&kmins](const Key_t& face) {
-                        return kmins.count(face) > 0;
+                        return kmins.find(face) != kmins.end();
                     });
             };
 
@@ -189,7 +189,7 @@ class IncidenceLattice {
                     kmins.begin(),
                     kmins.end(),
                     [&minimals](const Key_t& min) {
-                        return minimals.count(min) > 0;
+                        return minimals.find(min) != minimals.end();
                     });
             };
 
