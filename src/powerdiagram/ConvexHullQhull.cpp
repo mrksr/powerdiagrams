@@ -35,12 +35,19 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     qhull.setErrorStream(&std::cerr);
     qhull.setOutputStream(&std::cout);
 
+    if (FLAGS_verbose) {
+        std::cerr << "Starting Qhull" << std::endl;
+    }
     // Find convex hull
     qhull.runQhull("", dimension, points.size(), &qhullpoints[0], FLAGS_qhullout.c_str());
 
     if (!FLAGS_qhullout.empty()) {
         std::cerr << "Qhull Message for parameters: " << FLAGS_qhullout << std::endl;
         qhull.outputQhull();
+    }
+
+    if (FLAGS_verbose) {
+        std::cout << "Qhull is done." << std::endl;
     }
 
     // Create incidence lattice
