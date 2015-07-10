@@ -20,7 +20,6 @@ DEFINE_bool(naive, false, "Run the Naive Algorithm");
 
 int main(int argc, char *argv[])
 {
-    gflags::ParseCommandLineFlags(&argc, &argv, true);
     std::string usage;
     usage += "This program calculates powerdiagrams from a set of spheres in n dimensions.\n";
     usage += "Sample usage:\n\t";
@@ -28,6 +27,7 @@ int main(int argc, char *argv[])
     usage += " [Options] <centers> <radii>\n";
     usage += "For a complete help, use option --help.\n";
     gflags::SetUsageMessage(usage);
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
 
     if (argc < 3) {
         std::cout << gflags::ProgramUsage();
