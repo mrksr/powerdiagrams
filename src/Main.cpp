@@ -3,6 +3,7 @@
 #include "PowerDiagramDual.hpp"
 #include "PowerDiagramNaive.hpp"
 #include <Eigen/Dense>
+#include <gflags/gflags.h>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -12,15 +13,24 @@
 #include "ConvexHullQhull.hpp"
 #endif
 
-void printUsage()
-{
-    std::cout << "Usage: ./powerdiagrams <centers> <radii>" << std::endl;
-}
+#ifdef HAVE_QHULL
+DEFINE_bool(dual, true, "Run the Dual Algorithm");
+#endif
+DEFINE_bool(naive, false, "Run the Naive Algorithm");
 
 int main(int argc, char *argv[])
 {
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
+    std::string usage;
+    usage += "This program calculates powerdiagrams from a set of spheres in n dimensions.\n";
+    usage += "Sample usage:\n\t";
+    usage += argv[0];
+    usage += " [Options] <centers> <radii>\n";
+    usage += "For a complete help, use option --help.\n";
+    gflags::SetUsageMessage(usage);
+
     if (argc < 3) {
-        printUsage();
+        std::cout << gflags::ProgramUsage();
         return 1;
     } else {
         const auto& spheres = FromCSV::spheres(argv[1], argv[2]);
@@ -44,41 +54,45 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef HAVE_QHULL
-        std::cout << "Dual algorithm:" << std::endl;
-        {
-            ConvexHullQhull conv;
-            PowerDiagramDual dual(conv);
-            auto diagram = dual.fromSpheres(spheres);
-            std::cout << "Number of minimal nodes: " << diagram.minimals().size() << std::endl;
-            for (auto& minimal : diagram.minimals()) {
-                std::cout << "Minimal: " << diagram.value(minimal).transpose() << std::endl;
-            }
-            std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
-            for (auto& maximal : diagram.maximals()) {
-                std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl;
-                std::cout << "Direct Predecessors: " << std::endl;
-                for (auto& pred : diagram.predecessors(maximal)) {
-                  std::cout << "Id: " << pred << std::endl;
-                  for (auto& min : diagram.minimalsOf(pred)) {
-                      std::cout << "  - " << diagram.value(min).transpose() << std::endl;
-                  }
+        if (FLAGS_dual) {
+            std::cout << "Dual algorithm:" << std::endl;
+            {
+                ConvexHullQhull conv;
+                PowerDiagramDual dual(conv);
+                auto diagram = dual.fromSpheres(spheres);
+                std::cout << "Number of minimal nodes: " << diagram.minimals().size() << std::endl;
+                for (auto& minimal : diagram.minimals()) {
+                    std::cout << "Minimal: " << diagram.value(minimal).transpose() << std::endl;
+                }
+                std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
+                for (auto& maximal : diagram.maximals()) {
+                    std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl;
+                    std::cout << "Direct Predecessors: " << std::endl;
+                    for (auto& pred : diagram.predecessors(maximal)) {
+                        std::cout << "Id: " << pred << std::endl;
+                        for (auto& min : diagram.minimalsOf(pred)) {
+                            std::cout << "  - " << diagram.value(min).transpose() << std::endl;
+                        }
+                    }
                 }
             }
+            std::cout << std::endl << std::endl;
         }
-        std::cout << std::endl << std::endl;
 #endif
 
-        std::cout << "Naive algorithm:" << std::endl;
-        {
-            PowerDiagramNaive naive;
-            auto diagram = naive.fromSpheres(spheres);
-            std::cout << "Number of minimal nodes: " << diagram.minimals().size() << std::endl;
-            for (auto& minimal : diagram.minimals()) {
-                std::cout << "Minimal: " << diagram.value(minimal).transpose() << std::endl;
-            }
-            std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
-            for (auto& maximal : diagram.maximals()) {
-                std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl;
+        if (FLAGS_naive) {
+            std::cout << "Naive algorithm:" << std::endl;
+            {
+                PowerDiagramNaive naive;
+                auto diagram = naive.fromSpheres(spheres);
+                std::cout << "Number of minimal nodes: " << diagram.minimals().size() << std::endl;
+                for (auto& minimal : diagram.minimals()) {
+                    std::cout << "Minimal: " << diagram.value(minimal).transpose() << std::endl;
+                }
+                std::cout << "Number of maximal nodes: " << diagram.maximals().size() << std::endl;
+                for (auto& maximal : diagram.maximals()) {
+                    std::cout << "Maximal: " << diagram.value(maximal).transpose() << std::endl;
+                }
             }
         }
 

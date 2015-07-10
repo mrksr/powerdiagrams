@@ -1,5 +1,6 @@
 DEBUG=debug
 RELEASE=release
+FLAGS?=
 
 .PHONY: all
 all: dbg | $(DEBUG)
@@ -30,39 +31,39 @@ multi:
 
 .PHONY: 2dsmall
 2dsmall: dbg
-	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_small_sites.csv ./examples/pd_bsp_2dCells_small_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_2dCells_small_sites.csv ./examples/pd_bsp_2dCells_small_gamma.csv
 
 .PHONY: 3dsmall
 3dsmall: dbg
-	$(DEBUG)/powerdiagram ./examples/pd_bsp_3dCells_small_sites.csv ./examples/pd_bsp_3dCells_small_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_3dCells_small_sites.csv ./examples/pd_bsp_3dCells_small_gamma.csv
 
 .PHONY: 2d
 2d: dbg
-	$(DEBUG)/powerdiagram ./examples/pd_bsp_2dCells_sites.csv ./examples/pd_bsp_2dCells_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_2dCells_sites.csv ./examples/pd_bsp_2dCells_gamma.csv
 
 .PHONY: 3d
 3d: dbg
-	$(DEBUG)/powerdiagram ./examples/pd_bsp_3dCells_sites.csv ./examples/pd_bsp_3dCells_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_3dCells_sites.csv ./examples/pd_bsp_3dCells_gamma.csv
 
 .PHONY: wine
 wine: dbg
-	$(DEBUG)/powerdiagram ./examples/pd_bsp_wine_sites.csv ./examples/pd_bsp_wine_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_wine_sites.csv ./examples/pd_bsp_wine_gamma.csv
 
 .PHONY: four
 four: dbg
-	$(DEBUG)/powerdiagram ./examples/four_sites.csv ./examples/four_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/four_sites.csv ./examples/four_gamma.csv
 
 .PHONY: grid
 grid: dbg
-	$(DEBUG)/powerdiagram ./examples/grid_sites.csv ./examples/grid_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/grid_sites.csv ./examples/grid_gamma.csv
 
 .PHONY: voronoi
 voronoi: dbg
-	$(DEBUG)/powerdiagram ./examples/voronoi_sites.csv ./examples/voronoi_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/voronoi_sites.csv ./examples/voronoi_gamma.csv
 
 .PHONY: garage
 garage: dbg
-	$(DEBUG)/powerdiagram ./examples/garage_sites.csv ./examples/garage_gamma.csv
+	$(DEBUG)/powerdiagram $(FLAGS) ./examples/garage_sites.csv ./examples/garage_gamma.csv
 
 .PHONY: run
 run: 2d

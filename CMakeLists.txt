@@ -26,6 +26,8 @@ if(EIGEN3_FOUND)
     list(APPEND LIB_LIBS ${EIGEN3_LIBRARIES})
 endif()
 
+find_package(gflags REQUIRED)
+
 if(WITH_CGAL)
     find_package(CGAL REQUIRED)
     if (CGAL_FOUND)
@@ -79,4 +81,5 @@ add_executable(powerdiagram
     )
 target_link_libraries(powerdiagram
     ${LIB_LIBS}
+    gflags
     )
