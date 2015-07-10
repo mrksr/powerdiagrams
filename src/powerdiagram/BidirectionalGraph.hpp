@@ -42,7 +42,7 @@ class BidirectionalGraph {
 
         Value_t& value(const Key_t& key)
         {
-            return std::get<0>(rep_[key]);
+            return std::get<0>(rep_.at(key));
         }
         void value(const Key_t& key, const Value_t& value)
         {
@@ -224,7 +224,7 @@ class BidirectionalGraph {
         }
         Keys_t& immPreds(const Key_t& key)
         {
-            return std::get<1>(rep_[key]);
+            return std::get<1>(rep_.at(key));
         }
         const Keys_t& immSuccs(const Key_t& key) const
         {
@@ -232,7 +232,7 @@ class BidirectionalGraph {
         }
         Keys_t& immSuccs(const Key_t& key)
         {
-            return std::get<2>(rep_[key]);
+            return std::get<2>(rep_.at(key));
         }
 };
 
