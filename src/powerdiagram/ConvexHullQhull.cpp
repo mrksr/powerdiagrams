@@ -1,16 +1,17 @@
 #include "ConvexHullQhull.hpp"
 
+#include <gflags/gflags.h>
+#include <iostream>
 #include <libqhullcpp/Qhull.h>
 #include <libqhullcpp/QhullFacet.h>
 #include <libqhullcpp/QhullFacetList.h>
-#include <libqhullcpp/QhullVertex.h>
 #include <libqhullcpp/QhullRidge.h>
+#include <libqhullcpp/QhullVertex.h>
 #include <unordered_map>
 #include <vector>
 
-#ifdef _VERBOSE_
-  #include <iostream>
-#endif
+DEFINE_string(qhullout, "", "Output string for Qhull (e.g. \"f i s\")");
+DECLARE_bool(verbose);
 
 using qhullID_t = int;
 using Eigen::VectorXd;
@@ -31,32 +32,43 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     }
 
     orgQhull::Qhull qhull;
-#ifdef _VERBOSE_
     qhull.setErrorStream(&std::cerr);
     qhull.setOutputStream(&std::cout);
-    qhull.useOutputStream = true;
-#endif
 
     // Find convex hull
-    qhull.runQhull("", dimension, points.size(), &qhullpoints[0], "f i s");
+    qhull.runQhull("", dimension, points.size(), &qhullpoints[0], FLAGS_qhullout.c_str());
 
-#ifdef _VERBOSE_
-    std::cout << "Final Status: " << qhull.qhullStatus() << std::endl;
-    std::cout << "Vertices (" << qhull.vertexCount() << ") " << std::endl;
-    std::cout << "Facets (" << qhull.facetCount() << "): " << std::endl << qhull.facetList();
-#endif
+    if (!FLAGS_qhullout.empty()) {
+        std::cerr << "Qhull Message for parameters: " << FLAGS_qhullout << std::endl;
+        qhull.outputQhull();
+    }
 
     // Create incidence lattice
     IncidenceLattice<VectorXd> lattice(VectorXd::Zero(dimension));
     std::unordered_map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
 
-#ifdef _VERBOSE_
-    int i = 0;
-#endif
-    decltype(lattice)::Keys_t vertices;
+    // Add facets and ridges
+    const auto facets = qhull.facetList().toStdVector();
     // Bookkeeping to ensure we visit every ridge only once.
     qhull.qhullQh()->visit_id++;
-    for (auto& facet : qhull.facetList().toStdVector()) {
+    // Temporary Set
+    decltype(lattice)::Keys_t vertices;
+    // Verbosity Things
+    size_t currentFacet = 0;
+    const size_t allFacets = facets.size();
+    const size_t outputStep = std::max<size_t>(allFacets / 100, 10);
+
+    for (auto& facet : facets) {
+        if (FLAGS_verbose && currentFacet % outputStep == 0) {
+            std::cerr
+                << "Adding Facet No. "
+                << currentFacet
+                << " of "
+                << allFacets
+                << std::endl;
+        }
+        currentFacet++;
+
         vertices.clear();
 
         // Add the facet
@@ -95,9 +107,6 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
                 }
 
                 lattice.addFace(vertices);
-#ifdef _VERBOSE_
-                std::cout << "Ridge " << ++i << std::endl;
-#endif
             }
         }
     }

@@ -10,9 +10,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 #############
 #  OPTIONS  #
 #############
-option(WITH_CGAL "Add CGAL convex hull algorithm" OFF)
+# option(WITH_CGAL "Add CGAL convex hull algorithm" OFF)
 option(WITH_QHULL "Add qhull convex hull algorithm" ON)
-option(VERBOSE "Compile with verbose output" OFF)
 
 ###############
 #  Libraries  #
@@ -61,10 +60,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 elseif(__COMPILER_CLANG)
     add_definitions("-std=c++11")
     add_definitions("-Wall -Wno-deprecated-declarations -pedantic")
-endif()
-
-if(VERBOSE)
-    add_definitions("-D_VERBOSE_")
 endif()
 
 ###############################

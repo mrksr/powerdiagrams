@@ -17,6 +17,7 @@
 DEFINE_bool(dual, true, "Run the Dual Algorithm");
 #endif
 DEFINE_bool(naive, false, "Run the Naive Algorithm");
+DEFINE_bool(verbose, false, "Verbose output");
 
 DECLARE_bool(help);
 DECLARE_bool(helpshort);
@@ -48,18 +49,18 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-#ifdef _VERBOSE_
-        std::cout << "Spheres:" << std::endl;
-        for (auto& item : spheres) {
+        if (FLAGS_verbose) {
+          std::cout << "Spheres:" << std::endl;
+          for (auto& item : spheres) {
             std::cout
-                << "Center: "
-                << std::get<0>(item).transpose()
-                << " - Radius: "
-                << std::get<1>(item)
-                << std::endl;
+              << "Center: "
+              << std::get<0>(item).transpose()
+              << " - Radius: "
+              << std::get<1>(item)
+              << std::endl;
+          }
+          std::cout << std::endl << std::endl;
         }
-        std::cout << std::endl << std::endl;
-#endif
 
 #ifdef HAVE_QHULL
         if (FLAGS_dual) {

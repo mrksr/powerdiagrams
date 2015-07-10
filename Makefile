@@ -22,7 +22,7 @@ rel: | $(RELEASE)
 
 .PHONY: debug
 dbg: | $(DEBUG)
-	cd $(DEBUG); cmake -DCMAKE_BUILD_TYPE=Debug -DVERBOSE=ON ..; $(MAKE)
+	cd $(DEBUG); cmake -DCMAKE_BUILD_TYPE=Debug ..; $(MAKE)
 
 .PHONY: multi
 multi:

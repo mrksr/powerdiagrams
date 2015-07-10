@@ -1,6 +1,9 @@
 #include "PowerDiagramDual.hpp"
+#include <gflags/gflags.h>
 #include <iostream>
 #include <vector>
+
+DECLARE_bool(verbose);
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -72,12 +75,6 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
             return polarOfSphere(sphere);
         });
 
-#ifdef _VERBOSE_
-    for (auto& polar : polars) {
-        std::cout << "Polar point: " << polar.transpose() << std::endl;
-    }
-#endif
-
     // Calculate their convex hull
     auto dualIncidences = hull_.hullOf(polars);
 
@@ -96,22 +93,22 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         // Make sure the normal points outwards
         normal = outwardsNormal(normal, facetPoints[0], polars);
 
-#ifdef _VERBOSE_
-        std::cout << "Normal: " << normal.transpose();
-#endif
+        if (FLAGS_verbose) {
+          std::cerr << "Normal: " << normal.transpose();
+        }
 
         // Save normal in incidence lattice
         dualIncidences.value(facet, normal);
 
         if (normal[dimension] < 0) {
             bottoms.insert(facet);
-#ifdef _VERBOSE_
-            std::cout << " Is bottom!";
-#endif
+            if (FLAGS_verbose) {
+              std::cerr << " Is bottom!";
+            }
         }
-#ifdef _VERBOSE_
-        std::cout << std::endl;
-#endif
+        if (FLAGS_verbose) {
+          std::cerr << std::endl;
+        }
     }
     dualIncidences.restrictToMaximals(bottoms);
 
