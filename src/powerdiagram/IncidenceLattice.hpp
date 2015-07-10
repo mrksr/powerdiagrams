@@ -3,6 +3,7 @@
 
 #include "BidirectionalGraph.hpp"
 #include <algorithm>
+#include <cassert>
 #include <queue>
 
 /**
@@ -98,17 +99,26 @@ class IncidenceLattice {
         }
         Key_t addFace(const Keys_t& faces)
         {
-            auto groups = bestGroups(faces);
+            assert(!faces.empty() && "Cannot add the empty face.");
+
+            Keys_t minimals;
+            for (auto& face : faces) {
+                const auto mins = minimalsOf(face);
+                minimals.insert(mins.begin(), mins.end());
+            }
+
+            auto groups = bestGroups(faces, minimals);
 
             if (groups.size() == 1) {
                 // This face already exists, return it
                 return *groups.begin();
             } else {
-                Key_t lub;
+                Keys_t lubs = leastUpperBounds(minimals, *faces.begin());
 
                 auto key = nextKey();
-                rep_.insertNode(key, defaultValue_);
-                if (leastUpperBound(faces, lub)) {
+                rep_.insertNode(key, std::make_tuple(defaultValue_, minimals));
+
+                for (auto& lub : lubs) {
                     for (auto& group : groups) {
                         rep_.deleteEdge(group, lub);
                     }
