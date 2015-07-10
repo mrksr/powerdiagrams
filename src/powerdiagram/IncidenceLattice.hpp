@@ -65,7 +65,6 @@ class IncidenceLattice {
             return rep_.maximalSuccessors(key);
         }
 
-        // FIXME: Potentially (too) expensive set intersection.
         void restrictToMaximals(const Keys_t& maximals)
         {
             rep_.restrictTo([&maximals, this](const Key_t& k) {
@@ -103,10 +102,26 @@ class IncidenceLattice {
             return key;
         }
 
+        /**
+         * @brief Add any new face.
+         * The face to add can also be maximal, using this function is just
+         * slower than using addMaximalFace in that case.
+         *
+         * @param faces The new face will be the union of all faces
+         *
+         * @return Key of the added face
+         */
         Key_t addFace(const Keys_t& faces)
         {
             return addFace(faces, false);
         }
+        /**
+         * @brief Add a face which is guaranteed to be maximal.
+         *
+         * @param faces The new face will be the union of all faces
+         *
+         * @return Key of the added face
+         */
         Key_t addMaximalFace(const Keys_t& faces)
         {
             return addFace(faces, true);
@@ -122,6 +137,14 @@ class IncidenceLattice {
             return nextKey_++;
         }
 
+        /**
+         * @brief Search for the least Upper bounds of the given minimals.
+         * A least upper bound is a node which is connected to all minimals
+         * and where there is no other upper bound below it.
+         * @param startFace Hint where to start the BFS for the lubs
+         *
+         * @return A possibly empty set of all lubs
+         */
         Keys_t leastUpperBounds(const Keys_t& minimals, const Key_t& startFace)
         {
             // A Node is an Upperbound if it is a successor of all nodes in
@@ -146,6 +169,16 @@ class IncidenceLattice {
             return lubs;
         }
 
+        /**
+         * @brief Search for the largest "pure" successors for all the faces in faces.
+         * An example of a group of vertices 1 and 2 would be {1, 2},
+         * but not {1, 2, 3}.
+         *
+         * @param faces Faces to be grouped
+         * @param minimals Pre-computed union of all minimals in the faces
+         *
+         * @return A non-empty set of largest groups containing all minimals at least once
+         */
         Keys_t bestGroups(const Keys_t& faces, const Keys_t& minimals)
         {
             // A Node is a group if it only contains minimals who are also
@@ -181,6 +214,15 @@ class IncidenceLattice {
             return groups;
         }
 
+        /**
+         * @brief Add the face constructed by merging faces to the lattice.
+         * To add this face, we need to remove the proper edges and replace
+         * them with new edges through this new face. The edges from below are
+         * given by the bestGroups, while the edges above are given by the
+         * least upper bounds.
+         *
+         * @param isEnsuredMaximal If the face is maximal, we can skip the lubs
+         */
         Key_t addFace(const Keys_t& faces, bool isEnsuredMaximal)
         {
             assert(!faces.empty() && "Cannot add the empty face.");
