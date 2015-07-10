@@ -18,6 +18,9 @@ DEFINE_bool(dual, true, "Run the Dual Algorithm");
 #endif
 DEFINE_bool(naive, false, "Run the Naive Algorithm");
 
+DECLARE_bool(help);
+DECLARE_bool(helpshort);
+
 int main(int argc, char *argv[])
 {
     std::string usage;
@@ -25,9 +28,14 @@ int main(int argc, char *argv[])
     usage += "Sample usage:\n\t";
     usage += argv[0];
     usage += " [Options] <centers> <radii>\n";
-    usage += "For a complete help, use option --help.\n";
+    usage += "For a complete help, use options --help or --helpfull.\n";
     gflags::SetUsageMessage(usage);
-    gflags::ParseCommandLineFlags(&argc, &argv, true);
+    gflags::ParseCommandLineNonHelpFlags(&argc, &argv, true);
+    if (FLAGS_help) {
+        FLAGS_help = false;
+        FLAGS_helpshort = true;
+    }
+    gflags::HandleCommandLineHelpFlags();
 
     if (argc < 3) {
         std::cout << gflags::ProgramUsage();
