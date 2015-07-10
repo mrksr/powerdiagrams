@@ -20,7 +20,7 @@ DEFINE_bool(naive, false, "Run the Naive Algorithm");
 DEFINE_bool(verbose, false, "Verbose output");
 
 DECLARE_bool(help);
-DECLARE_bool(helpshort);
+DECLARE_string(helpmatch);
 
 int main(int argc, char *argv[])
 {
@@ -34,13 +34,13 @@ int main(int argc, char *argv[])
     gflags::ParseCommandLineNonHelpFlags(&argc, &argv, true);
     if (FLAGS_help) {
         FLAGS_help = false;
-        FLAGS_helpshort = true;
+        FLAGS_helpmatch = "powerdiagram";
     }
     gflags::HandleCommandLineHelpFlags();
 
     if (argc < 3) {
         std::cout << gflags::ProgramUsage();
-        return 1;
+        return 0;
     } else {
         const auto& spheres = FromCSV::spheres(argv[1], argv[2]);
 
