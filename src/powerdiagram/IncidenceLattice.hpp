@@ -69,7 +69,7 @@ class IncidenceLattice {
         void restrictToMaximals(const Keys_t& maximals)
         {
             rep_.restrictTo([&maximals, this](const Key_t& k) {
-                    const auto& succs = maximalsOf(k);
+                    const auto succs = maximalsOf(k);
                     Keys_t intersection;
                     std::set_intersection(
                         maximals.begin(),
