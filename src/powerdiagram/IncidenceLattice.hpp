@@ -102,41 +102,14 @@ class IncidenceLattice {
 
             return key;
         }
+
         Key_t addFace(const Keys_t& faces)
         {
-            assert(!faces.empty() && "Cannot add the empty face.");
-
-            Keys_t minimals;
-            for (auto& face : faces) {
-                const auto mins = minimalsOf(face);
-                minimals.insert(mins.begin(), mins.end());
-            }
-
-            auto groups = bestGroups(faces, minimals);
-
-            if (groups.size() == 1) {
-                // This face already exists, return it
-                return *groups.begin();
-            } else {
-                Keys_t lubs = leastUpperBounds(minimals, *faces.begin());
-
-                auto key = nextKey();
-                rep_.insertNode(key, std::make_tuple(defaultValue_, minimals));
-
-                for (auto& lub : lubs) {
-                    for (auto& group : groups) {
-                        rep_.deleteEdge(group, lub);
-                    }
-
-                    rep_.insertEdge(key, lub);
-                }
-
-                for (auto& group : groups) {
-                    rep_.insertEdge(group, key);
-                }
-
-                return key;
-            }
+            return addFace(faces, false);
+        }
+        Key_t addMaximalFace(const Keys_t& faces)
+        {
+            return addFace(faces, true);
         }
 
     private:
@@ -206,6 +179,44 @@ class IncidenceLattice {
             }
 
             return groups;
+        }
+
+        Key_t addFace(const Keys_t& faces, bool isEnsuredMaximal)
+        {
+            assert(!faces.empty() && "Cannot add the empty face.");
+
+            Keys_t minimals;
+            for (auto& face : faces) {
+                const auto& mins = minimalsOf(face);
+                minimals.insert(mins.begin(), mins.end());
+            }
+
+            auto groups = bestGroups(faces, minimals);
+
+            if (groups.size() == 1) {
+                // This face already exists, return it
+                return *groups.begin();
+            } else {
+                auto key = nextKey();
+                rep_.insertNode(key, std::make_tuple(defaultValue_, minimals));
+
+                if (!isEnsuredMaximal) {
+                    Keys_t lubs = leastUpperBounds(minimals, *faces.begin());
+                    for (auto& lub : lubs) {
+                        for (auto& group : groups) {
+                            rep_.deleteEdge(group, lub);
+                        }
+
+                        rep_.insertEdge(key, lub);
+                    }
+                }
+
+                for (auto& group : groups) {
+                    rep_.insertEdge(group, key);
+                }
+
+                return key;
+            }
         }
 };
 
