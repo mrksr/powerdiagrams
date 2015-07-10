@@ -63,7 +63,7 @@ class IncidenceLattice {
         void restrictToMaximals(const Keys_t& maximals)
         {
             rep_.restrictTo([&maximals, this](const Key_t& k) {
-                    const auto& succs = rep_.maximalSuccessors(k);
+                    const auto& succs = maximalsOf(k);
                     Keys_t intersection;
                     std::set_intersection(
                         maximals.begin(),
@@ -77,7 +77,7 @@ class IncidenceLattice {
         void restrictToMinimals(const Keys_t& minimals)
         {
             rep_.restrictTo([&minimals, this](const Key_t& k) {
-                    const auto& preds = rep_.minimalPredecessors(k);
+                    const auto& preds = minimalsOf(k);
                     Keys_t intersection;
                     std::set_intersection(
                         minimals.begin(),
