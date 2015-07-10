@@ -134,19 +134,10 @@ class IncidenceLattice {
             return nextKey_++;
         }
 
-        bool leastUpperBound(const Keys_t& faces, Key_t& out)
+        Keys_t leastUpperBounds(const Keys_t& minimals, const Key_t& startFace)
         {
-            if (faces.empty()) {
-                return false;
-            }
-
             // A Node is an Upperbound if it is a successor of all nodes in
             // faces.
-            Keys_t minimals;
-            for (auto& face : faces) {
-                const auto mins = minimalsOf(face);
-                minimals.insert(mins.begin(), mins.end());
-            }
             const auto isUb = [&minimals, this](const Key_t& k) {
                 const auto kmins = minimalsOf(k);
                 return std::all_of(
@@ -158,18 +149,13 @@ class IncidenceLattice {
             };
 
             const auto lubs = rep_.findNodes(
-                *faces.begin(),
+                startFace,
                 isUb,
                 [&isUb](const Key_t& k) { return !isUb(k); },
                 [this](const Key_t& k) { return rep_.successors(k); }
                 );
 
-            if (lubs.empty()) {
-                return false;
-            } else {
-                out = *lubs.begin();
-                return true;
-            }
+            return lubs;
         }
 
         Keys_t bestGroups(const Keys_t& faces)
