@@ -127,7 +127,7 @@ class IncidenceLattice {
             // A Node is an Upperbound if it is a successor of all nodes in
             // faces.
             const auto isUb = [&minimals, this](const Key_t& k) {
-                const auto kmins = minimalsOf(k);
+                const auto& kmins = minimalsOf(k);
                 return std::all_of(
                     minimals.begin(),
                     minimals.end(),
@@ -151,7 +151,7 @@ class IncidenceLattice {
             // A Node is a group if it only contains minimals who are also
             // minimals of some of the faces.
             const auto isGroup = [&minimals, this](const Key_t& k) {
-                const auto kmins = minimalsOf(k);
+                const auto& kmins = minimalsOf(k);
                 return std::all_of(
                     kmins.begin(),
                     kmins.end(),
