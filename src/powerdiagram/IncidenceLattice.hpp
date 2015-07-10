@@ -50,11 +50,6 @@ class IncidenceLattice {
             return rep_.maximalElements();
         }
 
-        Keys_t minimalsOf(const Key_t& key)
-        {
-            // See definition of rep_
-            return std::get<1>(rep_.value(key));
-        }
         const Keys_t& minimalsOf(const Key_t& key) const
         {
             // See definition of rep_
