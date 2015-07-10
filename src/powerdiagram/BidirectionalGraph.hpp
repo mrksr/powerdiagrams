@@ -44,9 +44,9 @@ class BidirectionalGraph {
         {
             return std::get<0>(rep_.at(key));
         }
-        void value(const Key_t& key, const Value_t& value)
+        const Value_t& value(const Key_t& key) const
         {
-            std::get<0>(rep_[key]) = value;
+            return std::get<0>(rep_.at(key));
         }
 
         const Keys_t& predecessors(const Key_t& key) const
