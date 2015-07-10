@@ -1,7 +1,7 @@
-#include "FromCSV.hpp"
-#include "IncidenceLattice.hpp"
-#include "PowerDiagramDual.hpp"
-#include "PowerDiagramNaive.hpp"
+#include "powerdiagram/FromCSV.hpp"
+#include "powerdiagram/IncidenceLattice.hpp"
+#include "powerdiagram/PowerDiagramDual.hpp"
+#include "powerdiagram/PowerDiagramNaive.hpp"
 #include <Eigen/Dense>
 #include <gflags/gflags.h>
 #include <iostream>
@@ -10,7 +10,7 @@
 #include <vector>
 
 #ifdef HAVE_QHULL
-#include "ConvexHullQhull.hpp"
+#include "powerdiagram/ConvexHullQhull.hpp"
 #endif
 
 #ifdef HAVE_QHULL
