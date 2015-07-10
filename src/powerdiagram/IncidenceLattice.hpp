@@ -25,11 +25,11 @@ class IncidenceLattice {
 
         Value_t& value(const Key_t& key)
         {
-            return rep_.value(key);
+            return std::get<0>(rep_.value(key));
         }
-        void value(const Key_t& key, const Value_t& value)
+        const Value_t& value(const Key_t& key) const
         {
-            rep_.value(key, value);
+            return std::get<0>(rep_.value(key));
         }
 
         const Keys_t& predecessors(const Key_t& key) const
@@ -51,7 +51,8 @@ class IncidenceLattice {
 
         Keys_t minimalsOf(const Key_t& key) const
         {
-            return rep_.minimalPredecessors(key);
+            // See definition of rep_
+            return std::get<1>(rep_.value(key));
         }
         Keys_t maximalsOf(const Key_t& key) const
         {
@@ -91,7 +92,7 @@ class IncidenceLattice {
         Key_t addMinimal(const Value_t& value)
         {
             auto key = nextKey();
-            rep_.insertNode(key, value);
+            rep_.insertNode(key, std::make_tuple(value, Keys_t{key}));
 
             return key;
         }
@@ -124,7 +125,8 @@ class IncidenceLattice {
         }
 
     private:
-        BidirectionalGraph<Key_t, Value_t> rep_;
+        // Besides the Value, we save the minimal nodes to speed up face inserts.
+        BidirectionalGraph<Key_t, std::tuple<Value_t, Keys_t>> rep_;
         Key_t nextKey_;
         Value_t defaultValue_;
 
