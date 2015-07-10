@@ -76,13 +76,13 @@ class IncidenceLattice {
         void restrictToMinimals(const Keys_t& minimals)
         {
             rep_.restrictTo([&minimals, this](const Key_t& k) {
-                    const auto& succs = rep_.minimalPredecessors(k);
+                    const auto& preds = rep_.minimalPredecessors(k);
                     Keys_t intersection;
                     std::set_intersection(
                         minimals.begin(),
                         minimals.end(),
-                        succs.begin(),
-                        succs.end(),
+                        preds.begin(),
+                        preds.end(),
                         std::inserter(intersection, intersection.begin()));
                     return !intersection.empty();
                     });
