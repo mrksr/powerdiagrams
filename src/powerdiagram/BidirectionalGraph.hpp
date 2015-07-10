@@ -1,10 +1,11 @@
 #ifndef BIDIRECTIONALGRAPH_H
 #define BIDIRECTIONALGRAPH_H
 
-#include <queue>
+#include <deque>
 #include <set>
 #include <tuple>
 #include <unordered_map>
+#include <unordered_set>
 
 /**
  * @brief A datastructure containing a directed graph with efficient lookup in both directions.
@@ -188,15 +189,21 @@ class BidirectionalGraph {
         template <typename Filter, typename Continue, typename Next>
         Keys_t findNodes(const Key_t& from, Filter&& filter, Continue&& cont, Next&& next) const
         {
-            Keys_t visited;
-            std::queue<Key_t> tovisit;
-            tovisit.push(from);
+            //NOTE(mrksr): These statics improve the speed somewhat, but are a
+            //problem for thread safety. Since the structure is not thread-safe
+            //anyway, this is not so much of a problem.
+            static std::unordered_set<Key_t> visited;
+            static std::deque<Key_t> tovisit;
+            tovisit.clear();
+            visited.clear();
+
+            tovisit.push_back(from);
             visited.insert(from);
 
             Keys_t result;
             while (!tovisit.empty()) {
                 auto element = tovisit.front();
-                tovisit.pop();
+                tovisit.pop_front();
 
                 if (filter(element)) {
                     result.insert(element);
@@ -205,7 +212,7 @@ class BidirectionalGraph {
                 if (cont(element)) {
                     for (auto& item : next(element)) {
                         if (visited.count(item) == 0) {
-                            tovisit.push(item);
+                            tovisit.push_back(item);
                             visited.insert(item);
                         }
                     }
