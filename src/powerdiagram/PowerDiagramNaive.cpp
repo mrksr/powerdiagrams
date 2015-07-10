@@ -99,7 +99,7 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
                     vertices.insert(vertexMap[index]);
                 }
 
-                lattice.value(lattice.addFace(vertices), point);
+                lattice.value(lattice.addFace(vertices)) = point;
             }
         }
     }

@@ -98,7 +98,7 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         }
 
         // Save normal in incidence lattice
-        dualIncidences.value(facet, normal);
+        dualIncidences.value(facet) = normal;
 
         if (normal[dimension] < 0) {
             bottoms.insert(facet);
@@ -120,14 +120,14 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         const double offset = normal.dot(dualIncidences.value(vertex));
 
         const auto polar = polarOfHyperplane(normal, offset);
-        dualIncidences.value(facet, polar.head(dimension));
+        dualIncidences.value(facet) = polar.head(dimension);
 
         std::cout << "0-Face at: " << polar.head(dimension).transpose() << std::endl;
     }
 
     // Project Sphere centers back to the original space from the polar points.
     for (auto& sphere : dualIncidences.minimals()) {
-        dualIncidences.value(sphere, dualIncidences.value(sphere).head(dimension));
+        dualIncidences.value(sphere) = dualIncidences.value(sphere).head(dimension);
     }
 
     return dualIncidences;
