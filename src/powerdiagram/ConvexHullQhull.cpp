@@ -59,6 +59,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     const size_t outputStep = std::max<size_t>(allFacets / 100, 10);
 
     for (auto& facet : facets) {
+        // Add the facet
         if (FLAGS_verbose && currentFacet % outputStep == 0) {
             std::cerr
                 << "Adding Facet No. "
@@ -81,7 +82,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
             vertices.insert(vertexMap[id]);
         }
 
-        lattice.addFace(vertices);
+        lattice.addMaximalFace(vertices);
 
         // Add the ridges
         // See FAQ of qhull about makeridges.
