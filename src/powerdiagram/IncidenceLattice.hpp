@@ -158,16 +158,10 @@ class IncidenceLattice {
             return lubs;
         }
 
-        Keys_t bestGroups(const Keys_t& faces)
+        Keys_t bestGroups(const Keys_t& faces, const Keys_t& minimals)
         {
             // A Node is a group if it only contains minimals who are also
             // minimals of some of the faces.
-            Keys_t minimals;
-            for (auto& face : faces) {
-                const auto mins = minimalsOf(face);
-                minimals.insert(mins.begin(), mins.end());
-            }
-
             const auto isGroup = [&minimals, this](const Key_t& k) {
                 const auto kmins = minimalsOf(k);
                 return std::all_of(
