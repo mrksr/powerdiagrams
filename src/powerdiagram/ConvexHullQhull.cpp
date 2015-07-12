@@ -51,7 +51,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     }
 
     // Create incidence lattice
-    IncidenceLattice<VectorXd> lattice(VectorXd::Zero(dimension));
+    IncidenceLattice<VectorXd> lattice;
     std::unordered_map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
 
     // Add facets and ridges

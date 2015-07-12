@@ -76,7 +76,7 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
             spheres.end(),
             std::back_inserter(groups));
 
-    IncidenceLattice<VectorXd> lattice(VectorXd::Zero(0));
+    IncidenceLattice<VectorXd> lattice;
     std::unordered_map<size_t, decltype(lattice)::Key_t> vertexMap;
 
     for (auto& group : groups) {

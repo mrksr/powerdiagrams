@@ -17,10 +17,9 @@ class IncidenceLattice {
         using Key_t = size_t;
         using Keys_t = typename BidirectionalGraph<Key_t, Value_t>::Keys_t;
 
-        IncidenceLattice(const Value_t& defaultValue):
+        IncidenceLattice():
             rep_(),
-            nextKey_(0),
-            defaultValue_(defaultValue)
+            nextKey_(0)
         { }
         virtual ~IncidenceLattice() { }
 
@@ -126,7 +125,6 @@ class IncidenceLattice {
         // Besides the Value, we save the minimal nodes to speed up face inserts.
         BidirectionalGraph<Key_t, std::tuple<Value_t, Keys_t>> rep_;
         Key_t nextKey_;
-        Value_t defaultValue_;
 
         Key_t nextKey() {
             return nextKey_++;
@@ -235,7 +233,7 @@ class IncidenceLattice {
                 return *groups.begin();
             } else {
                 auto key = nextKey();
-                rep_.insertNode(key, std::make_tuple(defaultValue_, minimals));
+                rep_.insertNode(key, std::make_tuple(Value_t(), minimals));
 
                 if (!isEnsuredMaximal) {
                     Keys_t lubs = leastUpperBounds(minimals, *faces.begin());
