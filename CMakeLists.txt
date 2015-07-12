@@ -2,10 +2,15 @@
 #  Project definition  #
 ########################
 # set(CMAKE_BUILD_TYPE_INIT "Release")
-project(PowerDiagrams)
+project(POWERDIAGRAMS)
 
-cmake_minimum_required (VERSION 2.8.0)
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
+cmake_minimum_required (VERSION 2.8.7)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+# Prefer bunled versions of dependenceis.
+set(DEPS_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/.deps/usr" CACHE PATH "Path prefix for finding dependencies")
+list(INSERT CMAKE_PREFIX_PATH 0 ${DEPS_PREFIX})
+set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${DEPS_PREFIX}/lib/pkgconfig")
 
 #############
 #  OPTIONS  #
@@ -20,33 +25,28 @@ set(LIB_INCS)
 set(LIB_LIBS)
 
 find_package(Eigen3 REQUIRED)
-if(EIGEN3_FOUND)
-    list(APPEND LIB_INCS ${EIGEN3_INCLUDE_DIR})
-    list(APPEND LIB_LIBS ${EIGEN3_LIBRARIES})
-endif()
+list(APPEND LIB_INCS ${EIGEN3_INCLUDE_DIR})
+list(APPEND LIB_LIBS ${EIGEN3_LIBRARIES})
 
 find_package(gflags REQUIRED)
 
-if(WITH_CGAL)
-    find_package(CGAL REQUIRED)
-    if (CGAL_FOUND)
-        list(APPEND LIB_INCS ${CGAL_INCLUDE_DIRS})
-        list(APPEND LIB_LIBS ${CGAL_LIBRARY})
-    endif()
+#NOTE: CGAL convex hull is not implemented right now.
+# if(WITH_CGAL)
+#     find_package(CGAL REQUIRED)
+#     list(APPEND LIB_INCS ${CGAL_INCLUDE_DIRS})
+#     list(APPEND LIB_LIBS ${CGAL_LIBRARY})
 
-    add_definitions(-DHAVE_CGAL)
-endif()
+#     add_definitions(-DHAVE_CGAL)
+# endif()
 
 if(WITH_QHULL)
     # FIXME: Non-static build breaks qhull
     set(QHULL_USE_STATIC 1)
 
     find_package(Qhull REQUIRED)
-    if(QHULL_FOUND)
-        list(APPEND LIB_INCS ${QHULL_INCLUDE_DIRS})
-        list(APPEND LIB_LIBS ${QHULL_LIBRARY_CPP})
-        list(APPEND LIB_LIBS ${QHULL_LIBRARY})
-    endif()
+    list(APPEND LIB_INCS ${QHULL_INCLUDE_DIRS})
+    list(APPEND LIB_LIBS ${QHULL_LIBRARY_CPP})
+    list(APPEND LIB_LIBS ${QHULL_LIBRARY})
 
     add_definitions(-DHAVE_QHULL)
 endif()

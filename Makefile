@@ -1,69 +1,84 @@
-DEBUG=debug
-RELEASE=release
-FLAGS?=
+filter-false = $(strip $(filter-out 0 off OFF false FALSE,$1))
+filter-true = $(strip $(filter-out 1 on ON true TRUE,$1))
 
-.PHONY: all
-all: dbg | $(DEBUG)
+BUILD_FOLDER?=build
+RUN_FLAGS?=
+INPUT_NAME?=voronoi
+USE_BUNDLED_DEPS?=1
 
-$(DEBUG):
-	mkdir -p $(DEBUG)
+CMAKE_BUILD_TYPE?=Debug
+CMAKE_FLAGS := -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
+CMAKE_DEPS_FLAGS?=
 
-$(RELEASE):
-	mkdir -p $(RELEASE)
+ifneq (,$(USE_BUNDLED_DEPS))
+  BUNDLED_CMAKE_FLAG := -DUSE_BUNDLED=$(USE_BUNDLED_DEPS)
+endif
 
-.PHONY: clean
+all: powerdiagram | $(DEBUG)
+
 clean:
-	$(RM) -r $(DEBUG)
-	$(RM) -r $(RELEASE)
+	$(RM) -r $(BUILD_FOLDER)
 
-.PHONY: release
-rel: | $(RELEASE)
-	cd $(RELEASE); cmake -DCMAKE_BUILD_TYPE=Release ..; $(MAKE)
+clean-deps:
+	$(RM) -r .deps
 
-.PHONY: debug
-dbg: | $(DEBUG)
-	cd $(DEBUG); cmake -DCMAKE_BUILD_TYPE=Debug ..; $(MAKE)
+powerdiagram: $(BUILD_FOLDER)/.ran-cmake deps
+	+$(MAKE) -C $(BUILD_FOLDER)
 
-.PHONY: multi
-multi:
-	$(MAKE) clean $(RELEASE) $(DEBUG)
-	$(MAKE) all -j 4
+$(BUILD_FOLDER)/.ran-cmake: | deps
+	cd $(BUILD_FOLDER) && cmake $(CMAKE_FLAGS) ..
+	touch $@
 
-.PHONY: 2dsmall
-2dsmall: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_2dCells_small_sites.csv ./examples/pd_bsp_2dCells_small_gamma.csv
+deps: | build/.ran-third-party-cmake
+ifeq ($(call filter-true,$(USE_BUNDLED_DEPS)),)
+	+$(MAKE) -C .deps
+endif
 
-.PHONY: 3dsmall
-3dsmall: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_3dCells_small_sites.csv ./examples/pd_bsp_3dCells_small_gamma.csv
-
-.PHONY: 2d
-2d: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_2dCells_sites.csv ./examples/pd_bsp_2dCells_gamma.csv
-
-.PHONY: 3d
-3d: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_3dCells_sites.csv ./examples/pd_bsp_3dCells_gamma.csv
-
-.PHONY: wine
-wine: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/pd_bsp_wine_sites.csv ./examples/pd_bsp_wine_gamma.csv
-
-.PHONY: four
-four: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/four_sites.csv ./examples/four_gamma.csv
-
-.PHONY: grid
-grid: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/grid_sites.csv ./examples/grid_gamma.csv
-
-.PHONY: voronoi
-voronoi: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/voronoi_sites.csv ./examples/voronoi_gamma.csv
-
-.PHONY: garage
-garage: dbg
-	$(DEBUG)/powerdiagram $(FLAGS) ./examples/garage_sites.csv ./examples/garage_gamma.csv
+$(BUILD_FOLDER)/.ran-third-party-cmake:
+ifeq ($(call filter-true,$(USE_BUNDLED_DEPS)),)
+	mkdir -p .deps
+	cd .deps && \
+		cmake $(CMAKE_FLAGS) $(BUNDLED_CMAKE_FLAG) $(CMAKE_DEPS_FLAGS) ../third-party
+endif
+	mkdir -p $(BUILD_FOLDER)
+	touch $@
 
 .PHONY: run
-run: 2d
+run: powerdiagram
+	$(BUILD_FOLDER)/powerdiagram $(RUN_FLAGS) ./examples/$(INPUT_NAME)_sites.csv ./examples/$(INPUT_NAME)_gamma.csv
+
+.PHONY: 2dsmall
+2dsmall:
+	$(MAKE) INPUT_NAME=pd_bsp_2dCells_small run
+
+.PHONY: 3dsmall
+3dsmall:
+	$(MAKE) INPUT_NAME=pd_bsp_3dCells_small run
+
+.PHONY: 2d
+2d:
+	$(MAKE) INPUT_NAME=pd_bsp_2dCells run
+
+.PHONY: 3d
+3d:
+	$(MAKE) INPUT_NAME=pd_bsp_3dCells run
+
+.PHONY: wine
+wine:
+	$(MAKE) INPUT_NAME=pd_bsp_wine run
+
+.PHONY: four
+four:
+	$(MAKE) INPUT_NAME=four run
+
+.PHONY: grid
+grid:
+	$(MAKE) INPUT_NAME=grid run
+
+.PHONY: voronoi
+voronoi:
+	$(MAKE) INPUT_NAME=voronoi run
+
+.PHONY: garage
+garage:
+	$(MAKE) INPUT_NAME=garage run
