@@ -22,7 +22,7 @@ clean:
 clean-deps:
 	$(RM) -r .deps
 
-clean-all: | clean clean-deps
+distclean: | clean clean-deps
 
 powerdiagram: $(BUILD_FOLDER)/.ran-cmake deps
 	+$(MAKE) -C $(BUILD_FOLDER)
