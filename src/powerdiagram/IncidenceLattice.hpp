@@ -9,7 +9,7 @@
 /**
  * @brief A datastructure containing incidences of faces in a d-dimensional polyhedron.
  *
- * @tparam Value_t (Vector-)Type describing 0- and d-faces.
+ * @tparam Value_t Type describing the faces, probably a vector.
  */
 template <typename Value_t>
 class IncidenceLattice {
