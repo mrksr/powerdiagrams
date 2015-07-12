@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     if (argc < 3) {
         std::cout << gflags::ProgramUsage();
-        return 0;
+        return 2;
     } else {
         const auto& spheres = FromCSV::spheres(argv[1], argv[2]);
 
