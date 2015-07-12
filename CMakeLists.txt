@@ -1,7 +1,6 @@
 ########################
 #  Project definition  #
 ########################
-# set(CMAKE_BUILD_TYPE_INIT "Release")
 project(POWERDIAGRAMS)
 
 cmake_minimum_required (VERSION 2.8.7)
@@ -11,6 +10,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 set(DEPS_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/.deps/usr" CACHE PATH "Path prefix for finding dependencies")
 list(INSERT CMAKE_PREFIX_PATH 0 ${DEPS_PREFIX})
 set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${DEPS_PREFIX}/lib/pkgconfig")
+link_directories(${DEPS_PREFIX}/lib)
 
 #############
 #  OPTIONS  #
@@ -28,6 +28,8 @@ find_package(Eigen3 REQUIRED)
 list(APPEND LIB_INCS ${EIGEN3_INCLUDE_DIR})
 list(APPEND LIB_LIBS ${EIGEN3_LIBRARIES})
 
+find_package(Threads REQUIRED)
+list(APPEND LIB_LIBS ${CMAKE_THREAD_LIBS_INIT})
 find_package(gflags REQUIRED)
 
 #NOTE: CGAL convex hull is not implemented right now.
