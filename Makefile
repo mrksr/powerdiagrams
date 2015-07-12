@@ -49,28 +49,28 @@ run: powerdiagram
 	$(BUILD_FOLDER)/powerdiagram $(RUN_FLAGS) ./examples/$(INPUT_NAME)_sites.csv ./examples/$(INPUT_NAME)_gamma.csv
 
 2dsmall:
-	$(MAKE) INPUT_NAME=pd_bsp_2dCells_small run
+	+$(MAKE) INPUT_NAME=pd_bsp_2dCells_small run
 
 3dsmall:
-	$(MAKE) INPUT_NAME=pd_bsp_3dCells_small run
+	+$(MAKE) INPUT_NAME=pd_bsp_3dCells_small run
 
 2d:
-	$(MAKE) INPUT_NAME=pd_bsp_2dCells run
+	+$(MAKE) INPUT_NAME=pd_bsp_2dCells run
 
 3d:
-	$(MAKE) INPUT_NAME=pd_bsp_3dCells run
+	+$(MAKE) INPUT_NAME=pd_bsp_3dCells run
 
 wine:
-	$(MAKE) INPUT_NAME=pd_bsp_wine run
+	+$(MAKE) INPUT_NAME=pd_bsp_wine run
 
 four:
-	$(MAKE) INPUT_NAME=four run
+	+$(MAKE) INPUT_NAME=four run
 
 grid:
-	$(MAKE) INPUT_NAME=grid run
+	+$(MAKE) INPUT_NAME=grid run
 
 voronoi:
-	$(MAKE) INPUT_NAME=voronoi run
+	+$(MAKE) INPUT_NAME=voronoi run
 
 garage:
-	$(MAKE) INPUT_NAME=garage run
+	+$(MAKE) INPUT_NAME=garage run

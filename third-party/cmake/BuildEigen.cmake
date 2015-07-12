@@ -10,14 +10,8 @@ function(BuildEigen)
     ExternalProject_Add(eigen
         PREFIX ${DEPS_BUILD_DIR}
         URL ${EIGEN_URL}
+        URL_HASH SHA256=${EIGEN_SHA256}
         DOWNLOAD_DIR ${DEPS_DOWNLOAD_DIR}/eigen
-        DOWNLOAD_COMMAND ${CMAKE_COMMAND}
-            -DPREFIX=${DEPS_BUILD_DIR}
-            -DDOWNLOAD_DIR=${DEPS_DOWNLOAD_DIR}/eigen
-            -DURL=${EIGEN_URL}
-            -DEXPECTED_SHA256=${EIGEN_SHA256}
-            -DTARGET=eigen
-            -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/DownloadAndExtractFile.cmake
         CONFIGURE_COMMAND "${_eigen_CONFIGURE_COMMAND}"
         BUILD_COMMAND "${_eigen_BUILD_COMMAND}"
         INSTALL_COMMAND "${_eigen_INSTALL_COMMAND}"

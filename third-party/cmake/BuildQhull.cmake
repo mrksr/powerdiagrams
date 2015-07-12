@@ -10,14 +10,8 @@ function(BuildQhull)
     ExternalProject_Add(qhull
         PREFIX ${DEPS_BUILD_DIR}
         URL ${QHULL_URL}
+        URL_HASH SHA256=${QHULL_SHA256}
         DOWNLOAD_DIR ${DEPS_DOWNLOAD_DIR}/qhull
-        DOWNLOAD_COMMAND ${CMAKE_COMMAND}
-            -DPREFIX=${DEPS_BUILD_DIR}
-            -DDOWNLOAD_DIR=${DEPS_DOWNLOAD_DIR}/qhull
-            -DURL=${QHULL_URL}
-            -DEXPECTED_SHA256=${QHULL_SHA256}
-            -DTARGET=qhull
-            -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/DownloadAndExtractFile.cmake
         CONFIGURE_COMMAND "${_qhull_CONFIGURE_COMMAND}"
         BUILD_IN_SOURCE 1
         BUILD_COMMAND "${_qhull_BUILD_COMMAND}"
