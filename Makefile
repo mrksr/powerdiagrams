@@ -22,6 +22,8 @@ clean:
 clean-deps:
 	$(RM) -r .deps
 
+clean-all: | clean clean-deps
+
 powerdiagram: $(BUILD_FOLDER)/.ran-cmake deps
 	+$(MAKE) -C $(BUILD_FOLDER)
 
@@ -43,42 +45,32 @@ endif
 	mkdir -p $(BUILD_FOLDER)
 	touch $@
 
-.PHONY: run
 run: powerdiagram
 	$(BUILD_FOLDER)/powerdiagram $(RUN_FLAGS) ./examples/$(INPUT_NAME)_sites.csv ./examples/$(INPUT_NAME)_gamma.csv
 
-.PHONY: 2dsmall
 2dsmall:
 	$(MAKE) INPUT_NAME=pd_bsp_2dCells_small run
 
-.PHONY: 3dsmall
 3dsmall:
 	$(MAKE) INPUT_NAME=pd_bsp_3dCells_small run
 
-.PHONY: 2d
 2d:
 	$(MAKE) INPUT_NAME=pd_bsp_2dCells run
 
-.PHONY: 3d
 3d:
 	$(MAKE) INPUT_NAME=pd_bsp_3dCells run
 
-.PHONY: wine
 wine:
 	$(MAKE) INPUT_NAME=pd_bsp_wine run
 
-.PHONY: four
 four:
 	$(MAKE) INPUT_NAME=four run
 
-.PHONY: grid
 grid:
 	$(MAKE) INPUT_NAME=grid run
 
-.PHONY: voronoi
 voronoi:
 	$(MAKE) INPUT_NAME=voronoi run
 
-.PHONY: garage
 garage:
 	$(MAKE) INPUT_NAME=garage run
