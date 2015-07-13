@@ -27,7 +27,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 
     for (size_t i = 0; i < points.size(); ++i) {
         for (size_t j = 0; j < dimension; ++j) {
-            qhullpoints[i * dimension + j] = points[i][j];
+            qhullpoints.push_back(points[i][j]);
         }
     }
 
