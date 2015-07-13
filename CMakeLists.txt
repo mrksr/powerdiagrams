@@ -1,9 +1,15 @@
 ########################
 #  Project definition  #
 ########################
+cmake_minimum_required (VERSION 2.8.7)
 project(POWERDIAGRAMS)
 
-cmake_minimum_required (VERSION 2.8.7)
+# Default to Release Builds
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "No build type selected, default to Release.")
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # Prefer bunled versions of dependenceis.
@@ -11,7 +17,6 @@ set(DEPS_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/.deps/usr" CACHE PATH "Path prefix 
 list(INSERT CMAKE_PREFIX_PATH 0 ${DEPS_PREFIX})
 set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${DEPS_PREFIX}/lib/pkgconfig")
 link_directories(${DEPS_PREFIX}/lib)
-
 #############
 #  OPTIONS  #
 #############
