@@ -31,6 +31,9 @@ list(APPEND LIB_LIBS ${EIGEN3_LIBRARIES})
 find_package(Threads REQUIRED)
 list(APPEND LIB_LIBS ${CMAKE_THREAD_LIBS_INIT})
 find_package(gflags REQUIRED)
+if(WIN32)
+    list(APPEND LIB_LIBS shlwapi)
+endif()
 
 #NOTE: CGAL convex hull is not implemented right now.
 # if(WITH_CGAL)
