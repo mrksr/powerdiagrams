@@ -34,8 +34,8 @@ list(APPEND LIB_INCS ${EIGEN3_INCLUDE_DIR})
 list(APPEND LIB_LIBS ${EIGEN3_LIBRARIES})
 
 find_package(Threads REQUIRED)
-list(APPEND LIB_LIBS ${CMAKE_THREAD_LIBS_INIT})
 find_package(gflags REQUIRED)
+list(APPEND LIB_LIBS gflags ${CMAKE_THREAD_LIBS_INIT})
 if(WIN32)
     list(APPEND LIB_LIBS shlwapi)
 endif()
@@ -86,5 +86,4 @@ add_executable(powerdiagram
     )
 target_link_libraries(powerdiagram
     ${LIB_LIBS}
-    gflags
     )
