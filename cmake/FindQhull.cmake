@@ -13,7 +13,7 @@ set(QHULL_MAJOR_VERSION 6)
 
 if(QHULL_USE_STATIC)
   set(QHULL_RELEASE_NAME qhullstatic_p)
-  set(QHULL_DEBUG_NAME qhullstatic_d)
+  set(QHULL_DEBUG_NAME qhullstatic_pd)
 
   set(QHULL_RELEASE_NAME_CPP qhullcpp)
   set(QHULL_DEBUG_NAME_CPP qhullcpp_d)
@@ -50,32 +50,16 @@ endif(QHULL_HEADER)
 set(QHULL_INCLUDE_DIR "${QHULL_INCLUDE_DIR}" CACHE PATH "QHull include dir." FORCE)
 
 find_library(QHULL_LIBRARY 
-             NAMES ${QHULL_RELEASE_NAME}
-             HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
-             PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
-             PATH_SUFFIXES project build bin lib)
-
-find_library(QHULL_LIBRARY_DEBUG 
-             NAMES ${QHULL_DEBUG_NAME} ${QHULL_RELEASE_NAME}
-             HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
-             PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
-             PATH_SUFFIXES project build bin lib)
+    NAMES ${QHULL_DEBUG_NAME} ${QHULL_RELEASE_NAME}
+    HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
+    PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
+    PATH_SUFFIXES project build bin lib)
 
 find_library(QHULL_LIBRARY_CPP
-             NAMES ${QHULL_RELEASE_NAME_CPP}
-             HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
-             PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
-             PATH_SUFFIXES project build bin lib)
-
-find_library(QHULL_LIBRARY_DEBUG_CPP
-             NAMES ${QHULL_DEBUG_NAME_CPP} ${QHULL_RELEASE_NAME_CPP}
-             HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
-             PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
-             PATH_SUFFIXES project build bin lib)
-
-if(NOT QHULL_LIBRARY_DEBUG)
-  set(QHULL_LIBRARY_DEBUG ${QHULL_LIBRARY})
-endif(NOT QHULL_LIBRARY_DEBUG)
+    NAMES ${QHULL_DEBUG_NAME_CPP} ${QHULL_RELEASE_NAME_CPP}
+    HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
+    PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
+    PATH_SUFFIXES project build bin lib)
 
 set(QHULL_INCLUDE_DIRS ${QHULL_INCLUDE_DIR})
 set(QHULL_LIBRARIES optimized ${QHULL_LIBRARY} ${QHULL_LIBRARY_CPP} debug ${QHULL_LIBRARY_DEBUG} ${QHULL_LIBRARY_DEBUG_CPP})
