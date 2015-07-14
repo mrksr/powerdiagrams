@@ -8,6 +8,7 @@ project(POWERDIAGRAMS)
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to Release.")
     set(CMAKE_BUILD_TYPE "Release")
+    mark_as_advanced(CMAKE_BUILD_TYPE)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
