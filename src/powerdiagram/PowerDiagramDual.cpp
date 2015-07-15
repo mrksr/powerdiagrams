@@ -132,5 +132,31 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         dualIncidences.value(sphere).conservativeResize(dimension);
     }
 
+    // Find directions of all the edges.
+    // We call the maximals "point" here since we have dualized them before
+    {
+        std::unordered_set<typename decltype(dualIncidences)::Key_t> visitedEdges;
+
+        for (auto& point : dualIncidences.maximals()) {
+            for (auto& edge : dualIncidences.predecessors(point)) {
+                // If an "edge" is minimal, there is an edge missing.
+                assert(!dualIncidences.isMinimal(edge));
+
+                if (visitedEdges.find(edge) == visitedEdges.end()) {
+                    visitedEdges.insert(edge);
+
+                    std::vector<VectorXd> spheres;
+                    for (auto& sphere : dualIncidences.minimalsOf(edge)) {
+                        spheres.push_back(dualIncidences.value(sphere));
+                    }
+
+                    auto direction = normalToAffineSpace(spheres);
+
+                    dualIncidences.value(edge) = direction;
+                }
+            }
+        }
+    }
+
     return dualIncidences;
 }
