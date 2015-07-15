@@ -186,6 +186,16 @@ class BidirectionalGraph {
                 );
         }
 
+        /**
+         * @brief Perform a Breadth First Search on the Graph filtering the results.
+         *
+         * @param from Starting Node
+         * @param filter Predicate (Key_t -> Bool) to decide whether to insert a node into the result.
+         * @param cont Predicate (Key_t -> Bool) to decide whether to continue the BFS.
+         * @param next Function (Key_t -> Keys_t) to continue the BFS (like the successor function).
+         *
+         * @return A Set of all Nodes visited for which filter(node) was true.
+         */
         template <typename Filter, typename Continue, typename Next>
         Keys_t findNodes(const Key_t& from, Filter&& filter, Continue&& cont, Next&& next) const
         {
@@ -211,11 +221,61 @@ class BidirectionalGraph {
 
                 if (cont(element)) {
                     for (auto& item : next(element)) {
-                        if (visited.count(item) == 0) {
+                        if (visited.find(item) == visited.end()) {
                             tovisit.push_back(item);
                             visited.insert(item);
                         }
                     }
+                }
+            }
+
+            return result;
+        }
+
+        /**
+         * @brief Perform a Breadth First Search on the Graph to search for the furthest Nodes for which the predicate is true.
+         *
+         * @param from Starting Node
+         * @param predicate Predicate (Key_t -> Bool) whose extreme Nodes should be found.
+         * @param next Function (Key_t -> Keys_t) to continue the BFS (like the successor function).
+         *
+         * @return A Set of all Nodes which are ends of paths of nodes for which predicate(node) is true.
+         */
+        template <typename Predicate, typename Next>
+        Keys_t findExtremeNodes(const Key_t& from, Predicate&& predicate, Next&& next) const
+        {
+            //NOTE(mrksr): These statics improve the speed somewhat, but are a
+            //problem for thread safety. Since the structure is not thread-safe
+            //anyway, this is not so much of a problem.
+            static std::unordered_set<Key_t> visited;
+            static std::deque<Key_t> tovisit;
+            tovisit.clear();
+            visited.clear();
+
+            if (predicate(from)) {
+                tovisit.push_back(from);
+                visited.insert(from);
+            }
+
+            Keys_t result;
+            while (!tovisit.empty()) {
+                auto element = tovisit.front();
+                tovisit.pop_front();
+
+                bool anyNextValid = false;
+                for (auto& item : next(element)) {
+                    if (visited.find(item) != visited.end()) {
+                        anyNextValid = true;
+                    } else if (predicate(item)) {
+                        anyNextValid = true;
+
+                        tovisit.push_back(item);
+                        visited.insert(item);
+                    }
+                }
+
+                if (!anyNextValid) {
+                    result.insert(element);
                 }
             }
 

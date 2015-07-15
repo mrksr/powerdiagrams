@@ -188,20 +188,14 @@ class IncidenceLattice {
 
             Keys_t groups;
             for (auto& face : faces) {
-                const auto candidates = rep_.findNodes(
+                const auto faceGroups = rep_.findExtremeNodes(
                     face,
-                    isGroup,
                     isGroup,
                     [this](const Key_t& k) { return rep_.successors(k); }
                     );
 
-                // Since face itself is a group, this is well-defined.
-                groups.insert(*std::max_element(
-                        candidates.begin(),
-                        candidates.end(),
-                        [this](const Key_t& a, const Key_t& b) {
-                            return minimalsOf(a).size() < minimalsOf(b).size();
-                        }));
+
+                groups.insert(faceGroups.begin(), faceGroups.end());
             }
 
             return groups;
