@@ -65,6 +65,16 @@ static VectorXd polarOfHyperplane(const VectorXd& normal, double offset)
     return res;
 }
 
+static double powerOfPoint(const VectorXd& point, const PowerDiagram::Sphere_t& sphere)
+{
+    VectorXd center;
+    double radius;
+    std::tie(center, radius) = sphere;
+
+    const auto difference = point - center;
+    return difference.dot(difference) - radius * radius;
+}
+
 IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Sphere_t>& spheres)
 {
     const auto dimension = std::get<0>(spheres[0]).size();
@@ -77,10 +87,12 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
 
     // Calculate their convex hull
     auto dualIncidences = hull_.hullOf(polars);
+    using Keys_t = typename decltype(dualIncidences)::Keys_t;
+    using Key_t = typename decltype(dualIncidences)::Key_t;
 
     // Calculate normals of the hyperplanes (facets),
     // Restrict the incidence lattice to the facets on the bottom side
-    decltype(dualIncidences)::Keys_t bottoms;
+    Keys_t bottoms;
     for (auto& facet : dualIncidences.maximals()) {
         std::vector<VectorXd> facetPoints;
         for (auto& key : dualIncidences.minimalsOf(facet)) {
@@ -128,14 +140,24 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
     }
 
     // Project Sphere centers back to the original space from the polar points.
+    // FIXME(mrksr): We recover the radii a bit clumsily here by comparing vectors.
     for (auto& sphere : dualIncidences.minimals()) {
-        dualIncidences.value(sphere).conservativeResize(dimension);
+        auto& polar = dualIncidences.value(sphere);
+
+        const auto it = std::find(polars.begin(), polars.end(), polar);
+        assert(it != polars.end());
+        const auto idx = std::distance(polars.begin(), it);
+
+        // To make it possible to recover the radius, we add it as the (d+1)st
+        // value into the sphere.
+        polar[dimension] = std::get<1>(spheres.at(idx));
     }
 
-    // Find directions of all the edges.
+    // Find directions of all the edges. If the edge is an extremal one, we
+    // find the "correct" direction starting from the existing 0-face.
     // We call the maximals "point" here since we have dualized them before
     {
-        std::unordered_set<typename decltype(dualIncidences)::Key_t> visitedEdges;
+        std::unordered_set<Key_t> visitedEdges;
 
         for (auto& point : dualIncidences.maximals()) {
             for (auto& edge : dualIncidences.predecessors(point)) {
@@ -147,10 +169,53 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
 
                     std::vector<VectorXd> spheres;
                     for (auto& sphere : dualIncidences.minimalsOf(edge)) {
-                        spheres.push_back(dualIncidences.value(sphere));
+                        spheres.push_back(dualIncidences.value(sphere).head(dimension));
                     }
 
                     auto direction = normalToAffineSpace(spheres);
+
+                    if (dualIncidences.successors(edge).size() == 1) {
+                        // This is an extremal edge, so we care about the sign
+                        // of the direction.
+                        // We find the direction by comparing the power on the
+                        // edge to the power of the additional sphere which
+                        // defines the point "point" the edge is also adjacent
+                        // to. The correct direction is then the one facing
+                        // "away" (in terms of power) from this sphere.
+
+                        const auto& minimalsOfPoint = dualIncidences.minimalsOf(point);
+                        const auto& minimalsOfEdge = dualIncidences.minimalsOf(edge);
+                        Keys_t candidates;
+                        std::set_difference(
+                                minimalsOfPoint.begin(),
+                                minimalsOfPoint.end(),
+                                minimalsOfEdge.begin(),
+                                minimalsOfEdge.end(),
+                                std::inserter(candidates, candidates.begin())
+                                );
+
+                        const auto testPoint = dualIncidences.value(point) + direction;
+
+                        const auto& activeSphere = dualIncidences.value(*minimalsOfEdge.begin());
+                        const auto activePower = powerOfPoint(
+                                testPoint,
+                                std::make_tuple(
+                                    activeSphere.head(dimension),
+                                    activeSphere[dimension]
+                                    ));
+
+                        const auto& inactiveSphere = dualIncidences.value(*candidates.begin());
+                        const auto inactivePower = powerOfPoint(
+                                testPoint,
+                                std::make_tuple(
+                                    inactiveSphere.head(dimension),
+                                    inactiveSphere[dimension]
+                                    ));
+
+                        if (activePower > inactivePower) {
+                            direction *= (-1);
+                        }
+                    }
 
                     dualIncidences.value(edge) = direction;
                 }
