@@ -47,7 +47,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     }
 
     if (FLAGS_verbose) {
-        std::cout << "Qhull is done." << std::endl;
+        std::cerr << "Qhull is done." << std::endl;
     }
 
     // Create incidence lattice
