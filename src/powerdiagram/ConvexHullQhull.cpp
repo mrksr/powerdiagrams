@@ -82,7 +82,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
         // Add the facet
         for (auto& vertex : facet.vertices()) {
             const auto id = vertex.point().id(qhull.runId());
-            if (vertexMap.count(id) <= 0) {
+            if (vertexMap.find(id) == vertexMap.end()) {
                 vertexMap[id] = lattice.addMinimal(points[id]);
             }
 
@@ -107,7 +107,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 
                 for (auto& vertex : ridge.vertices()) {
                     const auto id = vertex.point().id(qhull.runId());
-                    if (vertexMap.count(id) <= 0) {
+                    if (vertexMap.find(id) == vertexMap.end()) {
                         vertexMap[id] = lattice.addMinimal(points[id]);
                     }
 
