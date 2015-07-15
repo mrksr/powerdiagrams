@@ -58,6 +58,14 @@ class IncidenceLattice {
         {
             return rep_.maximalSuccessors(key);
         }
+        bool isMinimal(const Key_t& key) const
+        {
+            return rep_.isMinimal(key);
+        }
+        bool isMaximal(const Key_t& key) const
+        {
+            return rep_.isMaximal(key);
+        }
 
         void restrictToMaximals(const Keys_t& maximals)
         {
