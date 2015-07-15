@@ -122,7 +122,9 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         const auto polar = polarOfHyperplane(normal, offset);
         dualIncidences.value(facet) = polar.head(dimension);
 
-        std::cout << "0-Face at: " << polar.head(dimension).transpose() << std::endl;
+        if (FLAGS_verbose) {
+            std::cerr << "0-Face at: " << polar.head(dimension).transpose() << std::endl;
+        }
     }
 
     // Project Sphere centers back to the original space from the polar points.

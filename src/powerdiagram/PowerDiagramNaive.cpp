@@ -1,8 +1,11 @@
 #include "PowerDiagramNaive.hpp"
 
 #include "AllChoices.hpp"
+#include <gflags/gflags.h>
 #include <iostream>
 #include <unordered_map>
+
+DECLARE_bool(verbose);
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -88,7 +91,9 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
             const auto validFace = is0Face(spheres, group, point);
 
             if (validFace) {
-                std::cout << "0-Face at: " << point.transpose() << std::endl;
+                if (FLAGS_verbose) {
+                    std::cerr << "0-Face at: " << point.transpose() << std::endl;
+                }
 
                 decltype(lattice)::Keys_t vertices;
                 for (auto& index : group) {
