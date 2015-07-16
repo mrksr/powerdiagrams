@@ -54,7 +54,7 @@ def tikz(spheres, points, edges):
     print()
 
     for index, point in points.items():
-        print("\\node[point] () at (p{});".format(index))
+        print("\\node[point] () at (p{}) {};".format(index))
 
 if __name__ == '__main__':
     tikz(*parseFile(fileinput.input()))
