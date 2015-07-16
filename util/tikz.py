@@ -35,7 +35,7 @@ def tikz(spheres, points, edges):
 
     for index, sphere in spheres.items():
         center, radius = sphere
-        print("\\node[sphere center] (s{0}) at ({1}) {{{0}}};".format(index, printArray(center)))
+        print("\\node[sphere center] (s{0}) at ({1}) {{${0}$}};".format(index, printArray(center)))
         print("\\draw[sphere radius] (s{}) circle[radius={}];".format(index, radius))
 
     print()
@@ -54,7 +54,7 @@ def tikz(spheres, points, edges):
     print()
 
     for index, point in points.items():
-        print("\\node[point] () at (p{}) {};".format(index))
+        print("\\node[point] () at (p{}) {{}};".format(index))
 
 if __name__ == '__main__':
     tikz(*parseFile(fileinput.input()))
