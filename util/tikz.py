@@ -14,7 +14,7 @@ def tikz(spheres, points, edges):
         [a, b] = pts
         caption = ", ".join(map(str, sphrs))
         print(
-            "\\draw[internal edge] (p{}) edge node[spheres] {{${{{}}}$}} (p{});".format(
+            "\\draw[internal edge] (p{}) edge node[internal spheres] {{${{{}}}$}} (p{});".format(
                 a,
                 caption,
                 b
@@ -24,7 +24,7 @@ def tikz(spheres, points, edges):
         [a] = pts
         caption = ", ".join(map(str, sphrs))
         print(
-            "\\draw[extremal edge] (p{0}) edge node[spheres] {{${{{1}}}$}} ($(p{0}) + 10*({2})$);".format(
+            "\\draw[extremal edge] (p{0}) edge node[extremal spheres] {{${{{1}}}$}} ($(p{0}) + 10*({2})$);".format(
                 a,
                 caption,
                 printArray(direction)
