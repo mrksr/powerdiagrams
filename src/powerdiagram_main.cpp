@@ -66,7 +66,7 @@ static void draw(const Spheres& spheres)
     // Give every sphere a number and output it.
     std::unordered_map<Key_t, size_t> sphereMap;
     {
-        size_t i = 0;
+        size_t i = 1;
         for (auto& sphere : diagram.minimals()) {
             sphereMap[sphere] = i;
             // The last entry here is the radius
@@ -81,7 +81,7 @@ static void draw(const Spheres& spheres)
     // Give every point (0-face) a number and output it
     std::unordered_map<Key_t, size_t> pointMap;
     {
-        size_t i = 0;
+        size_t i = 1;
         for (auto& point : diagram.maximals()) {
             pointMap[point] = i;
             std::cout << "p" << i << " " << diagram.value(point).transpose() << std::endl;
