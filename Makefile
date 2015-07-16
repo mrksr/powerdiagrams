@@ -6,6 +6,8 @@ RUN_FLAGS?=
 INPUT_NAME?=voronoi
 USE_BUNDLED_DEPS?=1
 
+TIKZ_OUT?=0
+
 CMAKE_BUILD_TYPE?=Debug
 CMAKE_FLAGS := -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE)
 CMAKE_DEPS_FLAGS?=
@@ -46,7 +48,11 @@ endif
 	touch $@
 
 run: powerdiagram
+ifeq ($(call filter-true,$(TIKZ_OUT)),)
+	$(BUILD_FOLDER)/powerdiagram $(RUN_FLAGS) --draw ./examples/$(INPUT_NAME)_sites.csv ./examples/$(INPUT_NAME)_gamma.csv | ./util/tikz.py
+else
 	$(BUILD_FOLDER)/powerdiagram $(RUN_FLAGS) ./examples/$(INPUT_NAME)_sites.csv ./examples/$(INPUT_NAME)_gamma.csv
+endif
 
 2dsmall:
 	+$(MAKE) INPUT_NAME=pd_bsp_2dCells_small run
