@@ -1,0 +1,30 @@
+\documentclass[tikz]{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\xdefinecolor{tumblue}     {RGB}{  0,101,189}
+\xdefinecolor{tumgreen}    {RGB}{162,173,  0}
+\xdefinecolor{tumred}      {RGB}{229, 52, 24}
+\xdefinecolor{tumivory}    {RGB}{218,215,203}
+\xdefinecolor{tumorange}   {RGB}{227,114, 34}
+\xdefinecolor{tumlightblue}{RGB}{152,198,234}
+
+\tikzstyle{every node} = [font=\normalsize]
+
+\tikzstyle{edge} = [very thick]
+\tikzstyle{internal edge} = [edge, tumorange]
+\tikzstyle{extremal edge} = [edge, tumgreen]
+\tikzstyle{node on edge} = [fill=white, circle, inner sep=1pt, font=\small]
+\tikzstyle{internal spheres} = [node on edge]
+\tikzstyle{extremal spheres} = [node on edge, very near start]
+
+\tikzstyle{sphere center} = [tumred]
+\tikzstyle{sphere radius} = [thin, scale=0.5]
+\tikzstyle{point} = [circle, draw, fill, minimum size=4pt, inner sep=0pt]
+
+\begin{document}
+    \begin{tikzpicture}
+        $POWERDIAGRAM
+    \end{tikzpicture}
+\end{document}

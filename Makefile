@@ -49,7 +49,7 @@ endif
 
 run: powerdiagram
 ifeq ($(call filter-true,$(TIKZ_OUT)),)
-	$(BUILD_FOLDER)/powerdiagram $(RUN_FLAGS) --draw ./examples/$(INPUT_NAME)_sites.csv ./examples/$(INPUT_NAME)_gamma.csv | ./util/tikz.py
+	POWERDIAGRAM=`$(BUILD_FOLDER)/powerdiagram $(RUN_FLAGS) --draw ./examples/$(INPUT_NAME)_sites.csv ./examples/$(INPUT_NAME)_gamma.csv | ./util/tikz.py ` envsubst < ./util/template.tex
 else
 	$(BUILD_FOLDER)/powerdiagram $(RUN_FLAGS) ./examples/$(INPUT_NAME)_sites.csv ./examples/$(INPUT_NAME)_gamma.csv
 endif

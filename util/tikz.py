@@ -30,7 +30,7 @@ def tikz(spheres, points, edges):
                 printArray(direction)
             ))
 
-    print("\\path[clip, use as bounding box] (???) rectangle (???);")
+    print("% \\path[clip, use as bounding box] (???) rectangle (???);")
     print()
 
     for index, sphere in spheres.items():
