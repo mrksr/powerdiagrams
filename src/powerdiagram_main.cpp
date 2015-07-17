@@ -94,7 +94,8 @@ static void draw(const Spheres& spheres)
 
     // Output inner edges (1-face) as combination of points
     // And extremal edges (1-face) as a point and a direction
-    {
+    const auto dimension = std::get<0>(spheres[0]).size();
+    if (dimension > 1) {
         std::unordered_set<Key_t> visitedEdges;
 
         for (auto& point : diagram.maximals()) {

@@ -156,13 +156,13 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
     // Find directions of all the edges. If the edge is an extremal one, we
     // find the "correct" direction starting from the existing 0-face.
     // We call the maximals "point" here since we have dualized them before
-    {
+    if (dimension > 1) {
         std::unordered_set<Key_t> visitedEdges;
 
         for (auto& point : dualIncidences.maximals()) {
             for (auto& edge : dualIncidences.predecessors(point)) {
                 // If an "edge" is minimal, there is an edge missing.
-                assert(!dualIncidences.isMinimal(edge));
+                assert(!dualIncidences.isMinimal(edge) && "There is probably an edge missing.");
 
                 if (visitedEdges.find(edge) == visitedEdges.end()) {
                     visitedEdges.insert(edge);
