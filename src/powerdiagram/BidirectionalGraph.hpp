@@ -232,6 +232,9 @@ class BidirectionalGraph {
             return result;
         }
 
+        //FIXME(mrksr): It would be great to combine findNotes and
+        //findExtremeNotes into one function, since they do essentially the
+        //same thing.
         /**
          * @brief Perform a Breadth First Search on the Graph to search for the furthest Nodes for which the predicate is true.
          *
