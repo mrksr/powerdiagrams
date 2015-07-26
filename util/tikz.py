@@ -35,7 +35,7 @@ def tikz(spheres, points, edges):
 
     for index, sphere in spheres.items():
         center, radius = sphere
-        print("\\node[sphere center] (s{0}) at ({1}) {{${0}$}};".format(index, printArray(center)))
+        print("\\node[sphere center, label={{above:${0}$}}] (s{0}) at ({1}) {{}};".format(index, printArray(center)))
         print("\\draw[sphere radius] (s{}) circle[radius={}];".format(index, radius))
 
     print()
