@@ -160,14 +160,12 @@ class IncidenceLattice {
                     });
             };
 
-            const auto lubs = rep_.findNodes(
+            return rep_.findNodes(
                 startFace,
                 isUb,
                 [&isUb](const Key_t& k) { return !isUb(k); },
                 [this](const Key_t& k) { return rep_.successors(k); }
                 );
-
-            return lubs;
         }
 
         /**
