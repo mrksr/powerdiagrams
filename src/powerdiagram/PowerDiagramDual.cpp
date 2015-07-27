@@ -19,10 +19,20 @@ static VectorXd normalToAffineSpace(const std::vector<VectorXd>& vectors)
     return A.fullPivLu().kernel().col(0).normalized();
 }
 
-// Since we assume the polytope to be fully dimensional, there has
-// to exist some point not in the facet. The dot product of the
-// normal and this point has to be smaller than zero if the normal
-// points outwards.
+/**
+ * @brief Calculate a normal which, in relation to the convex hull of the
+ * vertices, faces outwards.
+ * Since we assume the polytope to be fully dimensional, there has
+ * to exist some point not in the facet. The dot product of the
+ * normal and this point has to be smaller than zero if the normal
+ * points outwards.
+ *
+ * @param normal Normal vector of some facet which might point inwards.
+ * @param vertexOnFacet A vertex guaranteed to be on the facet.
+ * @param vertices All vertices.
+ *
+ * @return Either normal or (-1) * normal, whichever points outwards.
+ */
 static VectorXd outwardsNormal(
         const VectorXd& normal,
         const VectorXd& vertexOnFacet,
@@ -39,7 +49,7 @@ static VectorXd outwardsNormal(
         }
     }
 
-    // This should not happen
+    // This should only happen if the hull is not fully dimensional.
     return normal;
 }
 

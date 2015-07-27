@@ -97,6 +97,13 @@ class IncidenceLattice {
                     });
         }
 
+        /**
+         * @brief Add a new minimal element, i.e. a new vertex.
+         *
+         * @param value Position of the vertex.
+         *
+         * @return Key of the added vertex.
+         */
         Key_t addMinimal(const Value_t& value)
         {
             auto key = nextKey();
@@ -110,9 +117,9 @@ class IncidenceLattice {
          * The face to add can also be maximal, using this function is just
          * slower than using addMaximalFace in that case.
          *
-         * @param faces The new face will be the union of all faces
+         * @param faces The new face will be the union of all faces.
          *
-         * @return Key of the added face
+         * @return Key of the added face.
          */
         Key_t addFace(const Keys_t& faces)
         {
@@ -121,9 +128,9 @@ class IncidenceLattice {
         /**
          * @brief Add a face which is guaranteed to be maximal.
          *
-         * @param faces The new face will be the union of all faces
+         * @param faces The new face will be the union of all faces.
          *
-         * @return Key of the added face
+         * @return Key of the added face.
          */
         Key_t addMaximalFace(const Keys_t& faces)
         {
@@ -143,9 +150,9 @@ class IncidenceLattice {
          * @brief Search for the least Upper bounds of the given minimals.
          * A least upper bound is a node which is connected to all minimals
          * and where there is no other upper bound below it.
-         * @param startFace Hint where to start the BFS for the lubs
+         * @param startFace Hint where to start the BFS for the lubs.
          *
-         * @return A possibly empty set of all lubs
+         * @return A possibly empty set of all lubs.
          */
         Keys_t leastUpperBounds(const Keys_t& minimals, const Key_t& startFace)
         {
@@ -174,10 +181,10 @@ class IncidenceLattice {
          * An example of a group of vertices 1 and 2 would be {1, 2},
          * but not {1, 2, 3}.
          *
-         * @param faces Faces to be grouped
-         * @param minimals Pre-computed union of all minimals in the faces
+         * @param faces Faces to be grouped.
+         * @param minimals Pre-computed union of all minimals in the faces.
          *
-         * @return A non-empty set of largest groups containing all minimals at least once
+         * @return A non-empty set of largest groups containing all minimals at least once.
          */
         Keys_t bestGroups(const Keys_t& faces, const Keys_t& minimals)
         {
@@ -215,7 +222,7 @@ class IncidenceLattice {
          * given by the bestGroups, while the edges above are given by the
          * least upper bounds.
          *
-         * @param isEnsuredMaximal If the face is maximal, we can skip the lubs
+         * @param isEnsuredMaximal If the face is maximal, we can skip the lubs.
          */
         Key_t addFace(const Keys_t& faces, bool isEnsuredMaximal)
         {

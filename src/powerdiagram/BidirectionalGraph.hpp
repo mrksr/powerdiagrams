@@ -125,6 +125,10 @@ class BidirectionalGraph {
             return res;
         }
 
+        /**
+         * @brief Restrict the graph to only those nodes and their induced
+         * edges which fulfill the predicate.
+         */
         template <typename Predicate>
         void restrictTo(Predicate&& pred)
         {

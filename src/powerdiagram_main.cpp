@@ -28,6 +28,11 @@ DECLARE_bool(help);
 DECLARE_string(helpmatch);
 
 #ifdef HAVE_QHULL
+/**
+ * @brief Outputs some general information about a power diagram using the Dual algorithm.
+ *
+ * @param spheres D-dimensional spheres in the format defined in PowerDiagram.hpp
+ */
 template<typename Spheres>
 static void dual(const Spheres& spheres)
 {
@@ -55,6 +60,12 @@ static void dual(const Spheres& spheres)
     }
 }
 
+/**
+ * @brief Outputs the power diagram in an easily parseable format using the Dual algorithm.
+ * See the util folder for a parser written in python.
+ *
+ * @param spheres D-dimensional spheres in the format defined in PowerDiagram.hpp
+ */
 template<typename Spheres>
 static void draw(const Spheres& spheres)
 {
@@ -133,6 +144,11 @@ static void draw(const Spheres& spheres)
 }
 #endif
 
+/**
+ * @brief Outputs some general information about a power diagram using the naive algorithm.
+ *
+ * @param spheres D-dimensional spheres in the format defined in PowerDiagram.hpp
+ */
 template<typename Spheres>
 static void naive(const Spheres& spheres)
 {
@@ -175,7 +191,7 @@ int main(int argc, char *argv[])
         const auto& spheres = FromCSV::spheres(argv[1], argv[2]);
 
         if (spheres.size() < 1) {
-            std::cout << "Error: Empty input. Maybe the Filenames are wrong?"<< std::endl;
+            std::cerr << "Error: Empty input. Maybe the Filenames are wrong?"<< std::endl;
             return 1;
         }
 

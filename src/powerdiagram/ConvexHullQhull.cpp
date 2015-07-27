@@ -20,8 +20,10 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
 {
     const size_t dimension = points[0].size();
 
-    // FIXME: Copy might not be necessary if we use an Eigen::map<>?
     // Copy the points to qhull format
+    // We use that std::vector guarantees that its contents are aligned in
+    // memory to avoid dynamic allocation in arrays.
+    // NOTE(mrksr): Copy might not be necessary if we use an Eigen::map<>?
     std::vector<coordT> qhullpoints;
     qhullpoints.reserve(dimension * points.size());
 
@@ -31,6 +33,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
         }
     }
 
+    // Find the convex hull and do some output-handling.
     orgQhull::Qhull qhull;
     qhull.setErrorStream(&std::cerr);
     qhull.setOutputStream(&std::cout);
@@ -38,7 +41,6 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
     if (FLAGS_verbose) {
         std::cerr << "Starting Qhull" << std::endl;
     }
-    // Find convex hull
     qhull.runQhull("", dimension, points.size(), &qhullpoints[0], FLAGS_qhullout.c_str());
 
     if (!FLAGS_qhullout.empty()) {
@@ -50,7 +52,7 @@ IncidenceLattice<VectorXd> ConvexHullQhull::hullOf(const std::vector<VectorXd>& 
         std::cerr << "Qhull is done." << std::endl;
     }
 
-    // Create incidence lattice
+    // Create the incidence lattice
     IncidenceLattice<VectorXd> lattice;
     std::unordered_map<qhullID_t, decltype(lattice)::Key_t> vertexMap;
 

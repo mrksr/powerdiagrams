@@ -1,6 +1,7 @@
 ########################
 #  Project definition  #
 ########################
+# This minimum required is a bit of a lie, it might be much lower actually.
 cmake_minimum_required (VERSION 2.8.7)
 project(POWERDIAGRAMS)
 

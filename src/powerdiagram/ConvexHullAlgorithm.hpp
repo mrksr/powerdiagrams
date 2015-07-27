@@ -14,10 +14,10 @@ class ConvexHullAlgorithm {
         /**
          * @brief D-Dimensional Convex Hull calculation.
          * Calculates the d-dimensional convex hull of the points provided. The
-         * incidence lattice returned must contain exactly the facetts and the
-         * points of the convex hull.
+         * incidence lattice returned should at least contain 1-faces besides
+         * 0-faces (vertices) and (d-1)-faces (facets).
          *
-         * @return A shallow incidence lattice of the convex hull.
+         * @return An incidence lattice of the convex hull.
          */
         virtual IncidenceLattice<Eigen::VectorXd> hullOf(const std::vector<Eigen::VectorXd>& points) = 0;
 

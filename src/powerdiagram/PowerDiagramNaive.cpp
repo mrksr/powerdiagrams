@@ -13,10 +13,20 @@ using Eigen::VectorXd;
 using Hyperplane_t = std::tuple<VectorXd, double>;
 using Sphere_t = PowerDiagram::Sphere_t;
 
+/**
+ * @brief For a group of spheres check whether they form a 0-face.
+ *
+ * @param spheres Vector of all spheres.
+ * @param group The indices of the current group.
+ *
+ * @return A pair of a boolean signifying whether there is a 0-face and the
+ * position if it exists.
+ */
 static std::pair<bool, VectorXd> possible0Face(
         const std::vector<Sphere_t>& spheres,
         const std::vector<size_t>& group)
 {
+    // Find all the chordales
     std::vector<std::vector<size_t>> pairs;
     AllChoices::indexGroupsOfLength<size_t>(
             2,
@@ -37,6 +47,7 @@ static std::pair<bool, VectorXd> possible0Face(
                 return std::make_tuple(normal, bias);
             });
 
+    // Find the (possibly not existing) intersection of the chordales
     MatrixXd A(planes.size(), std::get<0>(planes[0]).size());
     VectorXd b(planes.size());
 
@@ -46,12 +57,23 @@ static std::pair<bool, VectorXd> possible0Face(
     }
 
     const VectorXd result = A.fullPivLu().solve(b);
+    //Check if there actually is an intersection
     //FIXME: This might cause numerical issues.
     const bool hasSolution = (A * result).isApprox(b);
 
     return std::make_pair(hasSolution, result);
 }
 
+/**
+ * @brief For a group of spheres and a possible 0-face location, check if it is
+ * actually part of the power diagram.
+ *
+ * @param spheres Vector of all spheres.
+ * @param group The indices of the current group.
+ * @param point Location of the candidate 0-face.
+ *
+ * @return True if there is no sphere with lower power than the ones in group.
+ */
 static bool is0Face(
         const std::vector<Sphere_t>& spheres,
         const std::vector<size_t>& group,
@@ -73,6 +95,8 @@ static bool is0Face(
 IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphere_t>& spheres)
 {
     const size_t dim = std::get<0>(spheres[0]).size();
+
+    // Find all possible groups which might form a 0-face
     std::vector<std::vector<size_t>> groups;
     AllChoices::indexGroupsOfLength<size_t>(
             dim + 1,
@@ -83,6 +107,7 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
     IncidenceLattice<VectorXd> lattice;
     std::unordered_map<size_t, decltype(lattice)::Key_t> vertexMap;
 
+    // For all the groups, check if they actually form a 0-face
     for (auto& group : groups) {
         bool hasSolution;
         VectorXd point;
@@ -92,6 +117,7 @@ IncidenceLattice<VectorXd> PowerDiagramNaive::fromSpheres(const std::vector<Sphe
             const auto validFace = is0Face(spheres, group, point);
 
             if (validFace) {
+                // Add the 0-face to the lattice
                 if (FLAGS_verbose) {
                     std::cerr << "0-Face at: " << point.transpose() << std::endl;
                 }

@@ -10,6 +10,15 @@ class AllChoices {
     public:
         virtual ~AllChoices() { }
 
+        /**
+         * @brief Outputs all possible combinations without replacement of a
+         * specific length of the indices of elements from the input iterator.
+         *
+         * @param length The length of one combination.
+         * @param d_first An iterator of std::vectors of size_t.
+         *
+         * @return The last position of the output iterator.
+         */
         template<typename index_t, typename InputIt, typename OutputIt>
         static OutputIt indexGroupsOfLength(
                 size_t length,
@@ -29,6 +38,15 @@ class AllChoices {
                     prepend);
         }
 
+        /**
+         * @brief Outputs all possible combinations without replacement of a
+         * specific length from the input iterator.
+         *
+         * @param length The length of one combination.
+         * @param d_first An iterator of std::vectors of the input type.
+         *
+         * @return The last position of the output iterator.
+         */
         template<typename InputIt, typename OutputIt>
         static OutputIt groupsOfLength(
                 size_t length,
