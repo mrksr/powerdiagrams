@@ -65,16 +65,6 @@ static VectorXd polarOfHyperplane(const VectorXd& normal, double offset)
     return res;
 }
 
-static double powerOfPoint(const VectorXd& point, const PowerDiagram::Sphere_t& sphere)
-{
-    VectorXd center;
-    double radius;
-    std::tie(center, radius) = sphere;
-
-    const auto difference = point - center;
-    return difference.dot(difference) - radius * radius;
-}
-
 IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Sphere_t>& spheres)
 {
     const auto dimension = std::get<0>(spheres[0]).size();
@@ -197,20 +187,20 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
                         const auto testPoint = dualIncidences.value(point) + direction;
 
                         const auto& activeSphere = dualIncidences.value(*minimalsOfEdge.begin());
-                        const auto activePower = powerOfPoint(
-                                testPoint,
-                                std::make_tuple(
+                        const auto activePower = PowerDiagram::power(
+                                PowerDiagram::sphere(
                                     activeSphere.head(dimension),
                                     activeSphere[dimension]
-                                    ));
+                                    ),
+                                testPoint);
 
                         const auto& inactiveSphere = dualIncidences.value(*candidates.begin());
-                        const auto inactivePower = powerOfPoint(
-                                testPoint,
-                                std::make_tuple(
+                        const auto inactivePower = PowerDiagram::power(
+                                PowerDiagram::sphere(
                                     inactiveSphere.head(dimension),
                                     inactiveSphere[dimension]
-                                    ));
+                                    ),
+                                testPoint);
 
                         if (activePower > inactivePower) {
                             direction *= (-1);
