@@ -1,4 +1,5 @@
 #include "PowerDiagramDual.hpp"
+
 #include <gflags/gflags.h>
 #include <iostream>
 #include <vector>

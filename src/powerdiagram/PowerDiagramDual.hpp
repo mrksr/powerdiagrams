@@ -1,9 +1,10 @@
 #ifndef POWERDIAGRAMDUAL_H
 #define POWERDIAGRAMDUAL_H
 
-#include "PowerDiagram.hpp"
 #include "ConvexHullAlgorithm.hpp"
 #include "IncidenceLattice.hpp"
+#include "PowerDiagram.hpp"
+
 #include <Eigen/Dense>
 #include <tuple>
 #include <vector>

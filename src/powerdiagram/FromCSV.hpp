@@ -2,6 +2,7 @@
 #define FROMCSV_H
 
 #include "PowerDiagram.hpp"
+
 #include <vector>
 
 class FromCSV {

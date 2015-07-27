@@ -2,11 +2,11 @@
 #include "powerdiagram/IncidenceLattice.hpp"
 #include "powerdiagram/PowerDiagramDual.hpp"
 #include "powerdiagram/PowerDiagramNaive.hpp"
+
 #include <Eigen/Dense>
 #include <gflags/gflags.h>
 #include <iostream>
 #include <string>
-#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>

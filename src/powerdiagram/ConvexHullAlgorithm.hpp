@@ -2,6 +2,7 @@
 #define CONVEXHULLALGORITHM_H
 
 #include "IncidenceLattice.hpp"
+
 #include <Eigen/Dense>
 #include <vector>
 

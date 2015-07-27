@@ -1,6 +1,7 @@
 #include "PowerDiagramNaive.hpp"
 
 #include "AllChoices.hpp"
+
 #include <gflags/gflags.h>
 #include <iostream>
 #include <unordered_map>

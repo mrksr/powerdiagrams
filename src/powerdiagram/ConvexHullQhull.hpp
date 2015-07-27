@@ -3,6 +3,7 @@
 
 #include "ConvexHullAlgorithm.hpp"
 #include "IncidenceLattice.hpp"
+
 #include <Eigen/Dense>
 #include <vector>
 

@@ -1,4 +1,5 @@
 #include "FromCSV.hpp"
+
 #include <Eigen/Dense>
 #include <fstream>
 #include <iostream>

@@ -2,6 +2,7 @@
 #define INCIDENCELATTICE_H
 
 #include "BidirectionalGraph.hpp"
+
 #include <algorithm>
 #include <cassert>
 #include <queue>
