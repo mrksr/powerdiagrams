@@ -26,13 +26,11 @@ static std::pair<bool, VectorXd> possible0Face(
         const std::vector<Sphere_t>& spheres,
         const std::vector<size_t>& group)
 {
-    // Find all the chordales
+    // Find all chordales needed to define the 0-face
     std::vector<std::vector<size_t>> pairs;
-    AllChoices::indexGroupsOfLength<size_t>(
-            2,
-            group.begin(),
-            group.end(),
-            std::back_inserter(pairs));
+    for (size_t i = 1; i < group.size(); ++i) {
+        pairs.push_back({0, i});
+    }
 
     std::vector<Hyperplane_t> planes(pairs.size());
     std::transform(pairs.begin(), pairs.end(), planes.begin(),
