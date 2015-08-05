@@ -13,7 +13,7 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-# Prefer bunled versions of dependenceis.
+# Prefer bundled versions of dependenceis.
 set(DEPS_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/.deps/usr" CACHE PATH "Path prefix for finding dependencies")
 list(INSERT CMAKE_PREFIX_PATH 0 ${DEPS_PREFIX})
 set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${DEPS_PREFIX}/lib/pkgconfig")
@@ -80,10 +80,20 @@ include_directories(
     ${LIB_INCS}
     "${PROJECT_SOURCE_DIR}/include"
     )
-file(GLOB_RECURSE ownSRC RELATIVE "${PROJECT_SOURCE_DIR}" "src/*.cpp")
+
+set(OWN_SRC
+    "src/powerdiagram/FromCSV.cpp"
+    "src/powerdiagram/PowerDiagramDual.cpp"
+    "src/powerdiagram/PowerDiagramNaive.cpp"
+    "src/powerdiagram_main.cpp"
+    )
+
+if(WITH_QHULL)
+    list(APPEND OWN_SRC "src/powerdiagram/ConvexHullQhull.cpp")
+endif()
 
 add_executable(powerdiagram
-    ${ownSRC}
+    ${OWN_SRC}
     )
 target_link_libraries(powerdiagram
     ${LIB_LIBS}

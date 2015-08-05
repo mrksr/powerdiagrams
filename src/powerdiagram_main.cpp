@@ -17,11 +17,12 @@
 
 #ifdef HAVE_QHULL
 DEFINE_bool(dual, true, "Run the Dual Algorithm");
-DEFINE_bool(draw, false, "Output Information needed to draw the Diagram (implies --dual and --nonaive)");
-#else
-DECLARE_bool(draw);
-#endif
+DEFINE_bool(draw, false, "Output Information needed to draw the Diagram (implies -dual and -nonaive)");
 DEFINE_bool(naive, false, "Run the Naive Algorithm");
+#else
+#define FLAGS_draw false
+DEFINE_bool(naive, true, "Run the Naive Algorithm");
+#endif
 DEFINE_bool(verbose, false, "Verbose output");
 
 DECLARE_bool(help);

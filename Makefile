@@ -35,7 +35,9 @@ $(BUILD_FOLDER)/.ran-cmake: | deps
 
 deps: | build/.ran-third-party-cmake
 ifeq ($(call filter-true,$(USE_BUNDLED_DEPS)),)
+ifneq "$(wildcard .deps)" ""
 	+$(MAKE) -C .deps
+endif
 endif
 
 $(BUILD_FOLDER)/.ran-third-party-cmake:
