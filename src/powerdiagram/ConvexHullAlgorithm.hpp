@@ -14,8 +14,8 @@ class ConvexHullAlgorithm {
         /**
          * @brief D-Dimensional Convex Hull calculation.
          * Calculates the d-dimensional convex hull of the points provided. The
-         * incidence lattice returned should at least contain 1-faces besides
-         * 0-faces (vertices) and (d-1)-faces (facets).
+         * incidence lattice returned should at least contain (d-2)-faces
+         * besides 0-faces (vertices) and (d-1)-faces (facets).
          *
          * @return An incidence lattice of the convex hull.
          */

@@ -146,7 +146,7 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         auto& polar = dualIncidences.value(sphere);
 
         const auto it = std::find(polars.begin(), polars.end(), polar);
-        assert(it != polars.end());
+        assert(it != polars.end() && "Clumsy radius recovery failed.");
         const auto idx = std::distance(polars.begin(), it);
 
         // To make it possible to recover the radius, we add it as the (d+1)st
