@@ -278,6 +278,8 @@ class BidirectionalGraph {
 
                         tovisit.push_back(item);
                         visited.insert(item);
+                    } else {
+                        visited.insert(item);
                     }
                 }
 
