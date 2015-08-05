@@ -56,7 +56,7 @@ std::vector<PowerDiagram::Sphere_t> FromCSV::spheres(const char* centers, const 
         auto radius = nextRadius(radiusStream);
 
         if (center.size() > 0) {
-            spheres.push_back(PowerDiagram::sphere( center, radius));
+            spheres.push_back(PowerDiagram::sphere(center, radius));
         }
     }
 
