@@ -87,9 +87,9 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
         });
 
     // Calculate their convex hull
-    auto dualIncidences = hull_.hullOf(polars);
-    using Keys_t = typename decltype(dualIncidences)::Keys_t;
-    using Key_t = typename decltype(dualIncidences)::Key_t;
+    IncidenceLattice<VectorXd> dualIncidences = hull_.hullOf(polars);
+    using Keys_t = IncidenceLattice<VectorXd>::Keys_t;
+    using Key_t = IncidenceLattice<VectorXd>::Key_t;
 
     // Calculate normals of the hyperplanes (facets),
     // Restrict the incidence lattice to the facets on the bottom side
