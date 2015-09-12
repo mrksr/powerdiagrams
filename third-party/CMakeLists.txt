@@ -53,8 +53,8 @@ set(EIGEN_SHA256 5f6e6cb88188e34185f43cb819d7dab9b48ef493774ff834e568f4805d3dc2f
 set(QHULL_URL http://www.qhull.org/download/qhull-2012.1-src.tgz)
 set(QHULL_SHA256 a35ecaa610550b7f05c3ce373d89c30cf74b059a69880f03080c556daebcff88)
 
-set(GFLAGS_URL https://github.com/gflags/gflags/archive/v2.1.2.tar.gz)
-set(GFLAGS_SHA256 d8331bd0f7367c8afd5fcb5f5e85e96868a00fd24b7276fa5fcee1e5575c2662)
+set(GFLAGS_URL https://github.com/gflags/gflags/archive/4a56d614cfd21d33c7d65ebc3c4ed0eb3cda0807.zip)
+set(GFLAGS_SHA256 7d22fdf58ad56a8ba425f64e41b04894746f9ce0d54fded4cf26cef94d5d07c6)
 
 if(USE_BUNDLED_EIGEN)
     include(BuildEigen)
