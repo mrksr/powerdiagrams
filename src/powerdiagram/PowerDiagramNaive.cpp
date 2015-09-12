@@ -4,6 +4,7 @@
 
 #include <gflags/gflags.h>
 #include <iostream>
+#include <iterator>
 #include <unordered_map>
 
 DECLARE_bool(verbose);

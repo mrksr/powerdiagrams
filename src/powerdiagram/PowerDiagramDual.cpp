@@ -2,6 +2,7 @@
 
 #include <gflags/gflags.h>
 #include <iostream>
+#include <iterator>
 #include <vector>
 
 DECLARE_bool(verbose);
