@@ -168,9 +168,21 @@ class IncidenceLattice {
                     });
             };
 
+            // A Node is a least Upperbound if all of its predecessors are not
+            // Upperbounds
+            const auto isLub = [&isUb, this](const Key_t& k) {
+                const auto& preds = predecessors(k);
+                return isUb(k) && std::all_of(
+                        preds.begin(),
+                        preds.end(),
+                        [&isUb](const Key_t& pred) {
+                            return !isUb(pred);
+                        });
+            };
+
             return rep_.findNodes(
                 startFace,
-                isUb,
+                isLub,
                 [&isUb](const Key_t& k) { return !isUb(k); },
                 [this](const Key_t& k) { return rep_.successors(k); }
                 );
