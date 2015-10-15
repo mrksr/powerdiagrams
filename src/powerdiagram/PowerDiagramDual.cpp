@@ -87,6 +87,12 @@ IncidenceLattice<VectorXd> PowerDiagramDual::fromSpheres(const std::vector<Spher
             return polarOfSphere(sphere);
         });
 
+    if (FLAGS_verbose) {
+        for (auto& polar : polars) {
+            std::cerr << "Polar: " << polar.transpose() << std::endl;
+        }
+    }
+
     // Calculate their convex hull
     IncidenceLattice<VectorXd> dualIncidences = hull_.hullOf(polars);
     using Keys_t = IncidenceLattice<VectorXd>::Keys_t;
